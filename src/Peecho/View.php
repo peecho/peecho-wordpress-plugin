@@ -25,5 +25,9 @@ class Peecho_View
         ob_end_clean();
 
         return $view;
+        
     }
+
+    
+
 }

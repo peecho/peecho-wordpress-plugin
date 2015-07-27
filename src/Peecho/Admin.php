@@ -381,16 +381,7 @@ class Peecho_Admin
         }
     }
 
-    public function scriptFunction()
-    {
-        $userId = get_option('user_script_id');
-        echo '<script type="text/javascript">
-           var p=document.createElement("script");p.type="text/javascript";p.async=true;
-           var h=("https:"==document.location.protocol?"https://":"http://");
-           p.src=h+"d3aln0nj58oevo.cloudfront.net/button/script/'.$userId.'.js";
-           var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(p,s);
-        </script>';
-    }
+    
     /**
      * Creates a read-only overview page.
      *
@@ -510,5 +501,17 @@ class Peecho_Admin
         }
 
         echo $btn;
+    }
+
+    public function scriptFunction(){
+
+        $userId = get_option('user_script_id');
+        echo '<script type="text/javascript">
+           var p=document.createElement("script");p.type="text/javascript";p.async=true;
+           var h=("https:"==document.location.protocol?"https://":"http://");
+           p.src=h+"d3aln0nj58oevo.cloudfront.net/button/script/'.$userId.'.js";
+           var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(p,s);
+        </script>';
+        
     }
 }

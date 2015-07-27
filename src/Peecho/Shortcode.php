@@ -35,8 +35,10 @@ class Peecho_Shortcode
 
                     add_shortcode(
                         $snippet['title'],
+                        
                         create_function(
                             '$atts,$content=null',
+                            
                             '$shortcode_symbols = array('.$vars_str.');
                             extract(shortcode_atts($shortcode_symbols, $atts));
                             
