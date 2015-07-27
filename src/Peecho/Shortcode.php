@@ -69,13 +69,14 @@ class Peecho_Shortcode
                             if ($texturize == true) {
                                 $snippet = wptexturize( $snippet );
                             }
-
+                            
                             return $snippet;'
                         )
                     );
                 }
             }
         }
+        
     }
 
     /**
