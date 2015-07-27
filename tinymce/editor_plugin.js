@@ -26,7 +26,7 @@
 			ed.addButton('peecho', {
 				title : 'Insert Peecho Print Button',
 				cmd : 'mce_peecho',
-				image : url + '/peecho.gif'
+				image : url + '/peecho.svg'
 			});
 		},
 

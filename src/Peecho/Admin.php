@@ -15,6 +15,7 @@ class Peecho_Admin
         add_filter('plugin_action_links', array(&$this, 'actionLinks'), 10, 2);
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('current_screen', array(&$this, 'addHeaderXss'));
+        add_action( 'wp_head', array(&$this ,'scriptFunction') );
     }
 
 
@@ -35,7 +36,7 @@ class Peecho_Admin
         $pluginFile .= '/peecho.php';
 
         if ($file == $pluginFile) {
-            $url = 'options-general.php?page=peecho/peecho.php';
+            $url = 'options-general.php?page=peecho-wordpress-plugin/peecho.php';
             $link = "<a href='{$url}'>";
             $link .= __('Settings', Peecho::TEXT_DOMAIN).'</a>';
             $links[] = $link;
@@ -275,10 +276,10 @@ class Peecho_Admin
 
         // Tabs
         $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'snippets';
-        $base_url = '?page=peecho/peecho.php&amp;tab=';
+        $base_url = '?page=peecho-wordpress-plugin/peecho.php&amp;tab=';
         // =========
         //$tabs = array('snippets' => __('Manage Snippets', Peecho::TEXT_DOMAIN), 'tools' => __('Import/Export', Peecho::TEXT_DOMAIN));
-        $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN));
+        $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Setting', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($tabs as $tab => $title) {
             $active = ($active_tab == $tab) ? ' nav-tab-active' : '';
@@ -293,7 +294,7 @@ class Peecho_Admin
         if ($active_tab == 'snippets') {
             $this->tabSnippets();
         } else {
-            //$this->tabTools();
+            $this->tabSetting();
         }
 
         // Close it
@@ -335,7 +336,61 @@ class Peecho_Admin
         echo $ie->importSnippets();
     }
 
+    /**
+     * Tab for Setting
+     *
+     * @since   Peecho 2.0
+     */
+    private function tabSetting()
+    {
+        $userId = get_option('user_script_id');
+        // Create header and export html form
+        printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
+        echo '<form method="post" action="">';
+        echo '<p>';
+        _e('Enter your Peecho ID for create Peecho Print Button.', Peecho::TEXT_DOMAIN);
+        echo '</p>';
+        echo '<table>';
+            echo '<tr>';
+                echo '<td> User ID : </td>';
+                echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
+            echo '</tr>';
+        echo '</table>';
+        printf("<input type='submit' class='button' name='setting' value='%s' />", __('Save Setting', Peecho::TEXT_DOMAIN));
+        echo '</form>';
 
+        // Export logic, and import html form and logic
+        $this->saveSetting();
+    }
+
+    private function saveSetting()
+    {
+        // Create header and export html form
+        if(isset($_POST['setting']))
+        {
+            if(!empty($_POST['user_id']))
+            {
+                update_option('user_script_id', $_POST['user_id']);
+                $this->message(
+                    __(
+                        'A Script ID has been added.',
+                        Peecho::TEXT_DOMAIN
+                    )
+                );
+            }
+        }
+    }
+
+    public function scriptFunction()
+    {
+        $userId = get_option('user_script_id');
+        echo '<script type="text/javascript">
+           var p=document.createElement("script");p.type="text/javascript";p.async=true;
+           var h=("https:"==document.location.protocol?"https://":"http://");
+           p.src=h+"d3aln0nj58oevo.cloudfront.net/button/script/'.$userId.'.js";
+           var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(p,s);
+        </script>';
+    }
     /**
      * Creates a read-only overview page.
      *

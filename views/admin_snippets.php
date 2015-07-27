@@ -6,6 +6,7 @@
         <tr>
             <th scope="col" class="check-column"><input type="checkbox" /></th>
             <th scope="col" style="width: 180px;"><?php _e('Title', Peecho::TEXT_DOMAIN); ?></th>
+            <th scope="col" style="width: 180px;"><?php _e('Variables', Peecho::TEXT_DOMAIN); ?></th>
             <th scope="col"><?php _e('Snippet', Peecho::TEXT_DOMAIN); ?></th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
         <tr>
             <th scope="col" class="check-column"><input type="checkbox" /></th>
             <th scope="col"><?php _e('Title', Peecho::TEXT_DOMAIN) ?></th>
+            <th scope="col"><?php _e('Variables', Peecho::TEXT_DOMAIN) ?></th>
             <th scope="col"><?php _e('Snippet', Peecho::TEXT_DOMAIN) ?></th>
         </tr>
         </tfoot>
@@ -31,6 +33,17 @@ if (!empty($snippets)) {
             <input type='text' name='<?php echo $key;
         ?>_title' value='<?php echo $snippet['title'];
         ?>' />
+            </td>
+            <td class='name'>
+            <input type='text' name='<?php echo $key;
+        ?>_vars' value='<?php echo $snippet['vars'];
+        ?>' />
+            <br/>
+            <br/>
+            <?php
+            Peecho_Admin::checkbox(__('Shortcode', Peecho::TEXT_DOMAIN), $key.'_shortcode',
+                            $snippet['shortcode']);
+        ?>
             </td>
             <td class='desc'>
             <textarea name="<?php echo $key;
