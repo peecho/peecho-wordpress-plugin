@@ -8,11 +8,13 @@
                 <?php
                 foreach ($snippets as $key => $snippet) {
                     ?>
-                    <li onclick="getpeechoshortcut('peecho-shortcode-<?php echo $key;
-                    ?>')" ><input id="peecho-shortcode-<?php echo $key;?>-radio" type="radio"  value="title" name="title" ><a href="#ps-tabs-<?php echo $key;
+                    <li onclick="jQuery('#peecho-shortcode-<?php echo $key;
+                    ?>-radio').attr('checked','checked')" ><input id="peecho-shortcode-<?php echo $key;?>-radio" type="radio"  value="title" name="title" onclick="jQuery('#peecho-shortcode-<?php echo $key;
+                    ?>').trigger('click');"><a href="#ps-tabs-<?php echo $key;
                     ?>"  id="peecho-shortcode-<?php echo $key;
-                    ?>"><?php echo $snippet['title'];
-                    ?></a></li>
+                    ?>" onclick="jQuery('#peecho-shortcode-<?php echo $key;
+                    ?>-radio').attr('checked','checked')">
+					<?php echo ucwords($snippet['title']); ?></a></li>
                 <?php 
                 } ?>
             </ol>
@@ -75,12 +77,29 @@
     padding: 0 10px;
     cursor: pointer;
 }
+
+.peechoselect li a{
+	text-decoration:none !important;
+	outline:none !important;
+}
+.peechoselect li{
+	border:none !important;
+	outline:none !important;
+}
+.peechoselect li:focus{outline: 0 !important;}
+.peechoselect li a:focus{outline: 0 !important;}
+.peechoselect li{
+	border:none !important;
+	outline:none !important;
+}
+#peechonav ol li{outline:0 !important;}
+#peechonav ol:hover{outline:0 !important;}
+
 </style>
 <script>
 var nav = jQuery('#peechonav');
 var selection = jQuery('.peechoselect');
 var select = selection.find('li');
-
 nav.click(function(event) {
     if (nav.hasClass('active')) {
         nav.removeClass('active');
@@ -97,8 +116,9 @@ select.click(function(event) {
     jQuery(this).addClass('active');
 });
 function getpeechoshortcut(ID){
-   jQuery('#'+ID).trigger('click');
-   jQuery('#'+ID+'-radio').attr('checked','checked');
-   alert('here');
+   //jQuery('#'+ID).trigger('click');
+   //jQuery('#'+ID+'-radio').attr('checked','checked');
+   //alert('here');
 }
+
 </script>
