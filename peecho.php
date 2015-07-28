@@ -54,9 +54,6 @@ class Peecho{
         return self::$instance;
     }
 
-    /**
-     * Initializes the plugin.
-     */
     private function __construct()
     {
         if (!$this->testHost()) {
@@ -70,14 +67,6 @@ class Peecho{
         new Peecho_WPEditor;
         new Peecho_Shortcode;
     }
-
-    /**
-     * PSR-0 compliant autoloader to load classes as needed.
-     *
-     * @param  string  $classname  The name of the class
-     * @return null    Return early if the class name does not start with the
-     *                 correct prefix
-     */
     public static function autoload($className)
     {
         if (__CLASS__ !== mb_substr($className, 0, strlen(__CLASS__))) {
@@ -97,10 +86,6 @@ class Peecho{
 
         require $fileName;
     }
-
-    /**
-     * Loads the plugin text domain for translation
-     */
     public function textDomain()
     {
         $domain = self::TEXT_DOMAIN;
@@ -115,16 +100,9 @@ class Peecho{
             dirname(plugin_basename(__FILE__)).'/lang/'
         );
     }
-
-    /**
-     * Fired when the plugin is uninstalled.
-     */
     public function uninstall()
     {
-        // Delete all snippets
         delete_option('peecho_options');
-
-        // Delete any per user settings
         global $wpdb;
         $wpdb->query(
             "
@@ -133,22 +111,6 @@ class Peecho{
             "
         );
     }
-
-
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
-
-   /*
-	* Allow snippets to be retrieved directly from PHP.
-	*
-	* @since   Post Snippets 1.8.9.1
-	*
-	* @param  string  $name  The name of the snippet to retrieve
-	* @param  string|array  $variables  The variables to pass to the snippet,
-	*         formatted as a query string or an associative array.
-	* @return string  The Snippet
-	*/
     public static function getSnippet($name, $variables = ''){
         $snippets = get_option(self::OPTION_KEY, array());
         for ($i = 0; $i < count($snippets); $i++) {
@@ -174,24 +136,12 @@ class Peecho{
         }
         return do_shortcode($snippet);
     }
-
-    // -------------------------------------------------------------------------
-    // Environment Checks
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checks PHP and WordPress versions.
-     */
     private function testHost()
     {
-        // Check if PHP is too old
         if (version_compare(PHP_VERSION, self::MIN_PHP_VERSION, '<')) {
-            // Display notice
             add_action('admin_notices', array(&$this, 'phpVersionError'));
             return false;
         }
-
-        // Check if WordPress is too old
         global $wp_version;
         if (version_compare($wp_version, self::MIN_WP_VERSION, '<')) {
             add_action('admin_notices', array(&$this, 'wpVersionError'));
@@ -199,10 +149,6 @@ class Peecho{
         }
         return true;
     }
-
-    /**
-     * Displays a warning when installed on an old PHP version.
-     */
     public function phpVersionError()
     {
         echo '<div class="error"><p><strong>';
@@ -215,10 +161,6 @@ class Peecho{
         );
         echo '</strong></p></div>';
     }
-
-    /**
-     * Displays a warning when installed in an old Wordpress version.
-     */
     public function wpVersionError()
     {
         echo '<div class="error"><p><strong>';
@@ -230,29 +172,11 @@ class Peecho{
         echo '</strong></p></div>';
     }
 
-    /**
-     * Get the name of this plugin.
-     *
-     * @return string The plugin name.
-     */
     private function getPluginName()
     {
         $data = get_plugin_data(self::FILE);
         return $data['Name'];
     }
-
-    // -------------------------------------------------------------------------
-    // Deprecated methods
-    // -------------------------------------------------------------------------
-    /**
-     * Allow plugins to disable the PHP Code execution feature with a filter.
-     * Deprecated: Use the peecho_DISABLE_PHP global constant to disable
-     * PHP instead.
-     *
-     * @see   http://wordpress.org/extend/plugins/
-     * @since 2.1
-     * @deprecated 2.3
-     */
     public function phpExecState()
     {
         $filter = apply_filters('peecho_php_execution_enabled', true);
