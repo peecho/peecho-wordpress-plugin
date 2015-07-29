@@ -8,7 +8,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Sell magazines, books or wall decoration - straight from your own website. The Peecho WordPress plug-in will make it easy for WordPress users to include Peecho print buttons in posts and pages.
+The Peecho WordPress plug-in will make it easy for WordPress users to include Peecho print buttons in posts and pages.
 
 == Description ==
 
