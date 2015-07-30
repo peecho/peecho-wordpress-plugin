@@ -279,7 +279,7 @@ class Peecho_Admin
         $base_url = '?page=peecho-wordpress-plugin/peecho.php&amp;tab=';
         // =========
         //$tabs = array('snippets' => __('Manage Snippets', Peecho::TEXT_DOMAIN), 'tools' => __('Import/Export', Peecho::TEXT_DOMAIN));
-        $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Setting', Peecho::TEXT_DOMAIN));
+        $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($tabs as $tab => $title) {
             $active = ($active_tab == $tab) ? ' nav-tab-active' : '';

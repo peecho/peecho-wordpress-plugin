@@ -228,11 +228,11 @@ class Peecho_WPEditor
                     buttons: {
                         Cancel: function() {
                             $( this ).dialog( "close" );
-                            jQuery('.peechoselect').stop().slideUp();
+                           
                         },
                         "Insert": function() {
                             $(this).dialog("close");
-                            jQuery('.peechoselect').stop().slideUp();
+                            
                         <?php
                         global $wp_version;
         if (version_compare($wp_version, '3.5', '<')) {
