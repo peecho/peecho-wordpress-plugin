@@ -4,17 +4,24 @@
     <div id="peecho-dialog" title="Insert Peecho print Button">
         <?php // Init the tabs div ?>
         <div id="peecho-tabs">
-            <ul>
+
+            <h2 id="peechonav">Choose Button</h2>
+            <ol class="peechoselect">
+                
+
+           
                 <?php
                 // Create a tab for each available snippet
                 foreach ($snippets as $key => $snippet) {
                     ?>
-                    <li><a href="#ps-tabs-<?php echo $key;
+                    <li onclick="getpeechoshortcut('peecho-shortcode-<?php echo $key;
+                    ?>')" ><a href="#ps-tabs-<?php echo $key;
+                    ?>"  id="peecho-shortcode-<?php echo $key;
                     ?>"><?php echo $snippet['title'];
                     ?></a></li>
                 <?php 
                 } ?>
-            </ul>
+            </ol>
 
             <?php
             // Create a panel with form fields for each available snippet
@@ -61,7 +68,7 @@
                     // to inform the user that it's an insert snippet only.
                     if (empty($snippet['description'])) {
                         ?>
-                        <p class="howto"><?php _e('This snippet is insert only, no variables defined.', Peecho::TEXT_DOMAIN);
+                        <p class="howto"><?php _e('', Peecho::TEXT_DOMAIN);
                         ?></p>
                     <?php 
                     }
@@ -76,3 +83,73 @@
     </div><!-- #peecho-dialog -->
 </div><!-- .hidden -->
 <!-- END: Peecho UI Dialog -->
+
+
+
+<style>
+#peechonav {
+    width: 200px;
+    background: #222;
+    color:  #eee;
+    line-height: 25px;
+    font-size: 14px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+ol.peechoselect {
+    display: none;
+}
+
+ol.peechoselect > li {
+    width: 200px;
+    background: #eee;
+    line-height: 25px;
+    font-size: 14px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+ol.peechoselect > li:hover {
+    background: #aaa;
+}
+ol.peechoselect > li.active{
+   background:  #3a7e8c;
+   
+}
+ol.peechoselect > li.active a{
+   color:  #fff !important;
+   
+}
+ol.peechoselect > li a{
+   text-decoration: none;
+   
+}
+</style>
+<script>
+var nav = jQuery('#peechonav');
+var selection = jQuery('.peechoselect');
+var select = selection.find('li');
+
+nav.click(function(event) {
+    if (nav.hasClass('active')) {
+        nav.removeClass('active');
+        selection.stop().slideUp(200);
+    } else {
+        nav.addClass('active');
+        selection.stop().slideDown(200);
+    }
+    event.preventDefault();
+});
+
+select.click(function(event) {
+    // updated code to select the current language
+    select.removeClass('active');
+    jQuery(this).addClass('active');
+   
+    
+});
+
+function getpeechoshortcut(ID){
+   jQuery('#'+ID).trigger('click');
+}
+</script>

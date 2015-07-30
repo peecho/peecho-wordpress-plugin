@@ -217,8 +217,9 @@ class Peecho_WPEditor
         }
         ?>
 
-            var tabs = $("#peecho-tabs").tabs();
+            var tabs = $('#peecho-tabs').tabs();
 
+            
             $(function() {
                 $( "#peecho-dialog" ).dialog({
                     autoOpen: false,
@@ -227,18 +228,20 @@ class Peecho_WPEditor
                     buttons: {
                         Cancel: function() {
                             $( this ).dialog( "close" );
+                            jQuery('.peechoselect').stop().slideUp();
                         },
                         "Insert": function() {
                             $(this).dialog("close");
+                            jQuery('.peechoselect').stop().slideUp();
                         <?php
                         global $wp_version;
         if (version_compare($wp_version, '3.5', '<')) {
             ?>
                             var selected = tabs.tabs('option', 'selected');
-                        <?php
+        <?php
 
-        } else {
-            ?>
+            } else {
+        ?>
                             var selected = tabs.tabs('option', 'active');
                         <?php
 
@@ -247,7 +250,7 @@ class Peecho_WPEditor
                         <?php
         foreach ($snippets as $key => $snippet) {
             ?>
-                                if (selected == <?php echo $key;
+                if (selected == <?php echo $key;
             ?>) {
                                     insert_snippet = postsnippet_<?php echo $key;
             ?>;
@@ -277,9 +280,11 @@ class Peecho_WPEditor
                             if (peecho_caller == 'html') {
                                 // HTML editor in WordPress 3.3 and greater
                                 QTags.insertContent(insert_snippet);
+                                
                             } else {
                                 // Visual Editor
                                 peecho_canvas.execCommand('mceInsertContent', false, insert_snippet);
+                                
                             }
 
                         }

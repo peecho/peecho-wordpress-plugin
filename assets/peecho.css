@@ -1,16 +1,16 @@
 /**
- * Styling for the jQuery UI dialog used by Post Snippets 
+ * Styling for the jQuery UI dialog used by peecho Snippets 
  *
  * @version		2.0
- * @since		Post Snippets 1.7.1
+ * @since		peecho Snippets 1.7.1
  */
-#post-snippets-tabs {
+#peecho-snippets-tabs {
 	/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	position: relative;
 	padding: .2em;
 	zoom: 1; 
 }
-#post-snippets-tabs .ui-tabs-nav {
+#peecho-snippets-tabs .ui-tabs-nav {
 	margin: 0;
 	padding: .2em .2em 0;
 
@@ -20,7 +20,7 @@
 	padding-bottom: 1px;
 }
 
-#post-snippets-tabs .ui-tabs-nav li {
+#peecho-snippets-tabs .ui-tabs-nav li {
 	list-style: none;
 	float: left;
 	position: relative;
@@ -30,7 +30,7 @@
 	padding: 0;
 	white-space: nowrap;
 }
-#post-snippets-tabs .ui-tabs-nav li a {
+#peecho-snippets-tabs .ui-tabs-nav li a {
 	float: left;
 	padding: .5em 1em;
 	text-decoration: none;
@@ -40,7 +40,7 @@
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
-#post-snippets-tabs .ui-tabs-nav li.ui-tabs-selected {
+#peecho-snippets-tabs .ui-tabs-nav li.ui-tabs-selected {
 	margin-bottom: 0;
 	padding-bottom: 1px;
 
@@ -48,28 +48,28 @@
 	background-color: #fff;
 	padding-bottom: 0;
 }
-#post-snippets-tabs .ui-tabs-nav li.ui-tabs-selected a,
-#post-snippets-tabs .ui-tabs-nav li.ui-state-disabled a,
-#post-snippets-tabs .ui-tabs-nav li.ui-state-processing a {
+#peecho-snippets-tabs .ui-tabs-nav li.ui-tabs-selected a,
+#peecho-snippets-tabs .ui-tabs-nav li.ui-state-disabled a,
+#peecho-snippets-tabs .ui-tabs-nav li.ui-state-processing a {
 	cursor: text;
 }
-#post-snippets-tabs .ui-tabs-nav li a,
-#post-snippets-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a {
+#peecho-snippets-tabs .ui-tabs-nav li a,
+#peecho-snippets-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a {
 	/* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 	cursor: pointer;
 }
-#post-snippets-tabs .ui-tabs-panel {
+#peecho-snippets-tabs .ui-tabs-panel {
 	display: block;
 	border-width: 0;
 	padding: 1em 1.4em;
 	background: none;
 }
-#post-snippets-tabs .ui-tabs-hide {
+#peecho-snippets-tabs .ui-tabs-hide {
 	display: none !important;
 }
 
 
-#post-snippets-dialog label {
+#peecho-snippets-dialog label {
 	width: 60px;
 	display: inline-block;
 }
