@@ -1,19 +1,7 @@
 <?php
-/**
- * View Handling.
- *
- * @author   Peecho <artstorm at gmail dot com>
- * @link     http://www.peecho.com/
- */
 class Peecho_View
 {
-    /**
-     * Render a View.
-     *
-     * @param  string  $view
-     * @param  array   $data
-     * @return string
-     */
+    
     public static function render($view, $data = null)
     {
         // Handle data
@@ -27,7 +15,4 @@ class Peecho_View
         return $view;
         
     }
-
-    
-
 }

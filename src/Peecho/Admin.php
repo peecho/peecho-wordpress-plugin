@@ -1,13 +1,5 @@
 <?php
-/**
- * Peecho Settings.
- *
- * Class that renders out the HTML for the settings screen and contains helpful
- * methods to simply the maintainance of the admin screen.
- *
- * @author   Peecho <artstorm at gmail dot com>
- * @link     http://www.peecho.com/
- */
+
 class Peecho_Admin
 {
     public function __construct()
@@ -18,18 +10,6 @@ class Peecho_Admin
         add_action( 'wp_head', array(&$this ,'scriptFunction') );
     }
 
-
-    // -------------------------------------------------------------------------
-    // Setup
-    // -------------------------------------------------------------------------
-
-    /**
-     * Quick link to the Post Snippets Settings page from the Plugins page.
-     *
-     * @param array Array of all plugin links
-     * @param string The current plugin file we're filtering.
-     * @return  Array with all the plugin's action links
-     */
     public function actionLinks($links, $file)
     {
         $pluginFile = plugin_basename(dirname(Peecho::FILE));
@@ -43,10 +23,6 @@ class Peecho_Admin
         }
         return $links;
     }
-
-    /**
-     * Initialize the administration page.
-     */
     public function menu()
     {
         $capability = 'manage_options';
@@ -65,7 +41,6 @@ class Peecho_Admin
                 Peecho::FILE,
                 array(&$this, 'optionsPage')
             );
-            new Peecho_Help($optionPage);
         } else {
             $option_page = add_options_page(
                 'Peecho',
@@ -76,29 +51,12 @@ class Peecho_Admin
             );
         }
     }
-
-    /**
-     * Add X-XSS-Protection header.
-     *
-     * Newer versions of Chrome does not allow form tags to be submitted in the
-     * forms. This header disables that functionlity on the Post Snippets admin
-     * screen only.
-     */
     public function addHeaderXss($current_screen)
     {
         if ($current_screen->base == 'settings_page_peecho/peecho') {
             header('X-XSS-Protection: 0');
         }
     }
-
-
-    // -------------------------------------------------------------------------
-    // Handle form submissions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Add New Snippet.
-     */
     private function add()
     {
         if (isset($_POST['add-snippet'])
@@ -219,46 +177,18 @@ class Peecho_Admin
             update_user_meta($id, Peecho::USER_META_KEY, $render);
         }
     }
-
-    /**
-     * Get User Option.
-     *
-     * Gets the per user option for the read-only overview page.
-     *
-     * @since   Peecho 1.0
-     * @return  boolean If overview should be rendered on output or not
-     */
     private function getUserOptions()
     {
         $id = get_current_user_id();
         $options = get_user_meta($id, Peecho::USER_META_KEY, true);
         return $options;
     }
-
-
-    // -------------------------------------------------------------------------
-    // HTML generation for option pages
-    // -------------------------------------------------------------------------
-
-    /**
-     * Display Flashing Message.
-     *
-     * @param   string  $message    Message to display to the user.
-     */
     private function message($message)
     {
         if ($message) {
             echo "<div class='updated'><p><strong>{$message}</strong></p></div>";
         }
     }
-
-    /**
-     * Creates the snippets administration page.
-     *
-     * For users with manage_options capability (admin, super admin).
-     *
-     * @since   Peecho 1.0
-     */
     public function optionsPage()
     {
         // Handle Form Submits
@@ -271,14 +201,9 @@ class Peecho_Admin
         <!-- Create a header in the default WordPress \'wrap\' container -->
         <div class="wrap">
             <div id="icon-plugins" class="icon32"></div>
-            <h2>Peecho</h2>
-        ';
-
-        // Tabs
+            <h2>Peecho</h2>';
         $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'snippets';
         $base_url = '?page=peecho-wordpress-plugin/peecho.php&amp;tab=';
-        // =========
-        //$tabs = array('snippets' => __('Manage Snippets', Peecho::TEXT_DOMAIN), 'tools' => __('Import/Export', Peecho::TEXT_DOMAIN));
         $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($tabs as $tab => $title) {
@@ -287,41 +212,23 @@ class Peecho_Admin
         }
         echo '</h2>';
         echo '<p class="description">';
-        _e('Use the help dropdown button for additional information.', Peecho::TEXT_DOMAIN);
+       // _e('Use the help dropdown button for additional information.', Peecho::TEXT_DOMAIN);
         echo '</p>';
-
-        // Tab content
         if ($active_tab == 'snippets') {
             $this->tabSnippets();
         } else {
             $this->tabSetting();
         }
-
-        // Close it
         echo '</div>';
     }
-
-    /**
-     * Tab to Manage Snippets.
-     *
-     * @since   Post Snippets 2.0
-     */
     private function tabSnippets()
     {
         $data = array();
         echo Peecho_View::render('admin_snippets', $data);
     }
-
-    /**
-     * Tab for Import/Export
-     *
-     * @since   Post Snippets 2.0
-     */
     private function tabTools()
     {
         $ie = new Peecho_ImportExport();
-
-        // Create header and export html form
         printf("<h3>%s</h3>", __('Import/Export', Peecho::TEXT_DOMAIN));
         printf("<h4>%s</h4>", __('Export', Peecho::TEXT_DOMAIN));
         echo '<form method="post">';
@@ -330,21 +237,13 @@ class Peecho_Admin
         echo '</p>';
         printf("<input type='submit' class='button' name='Peecho_export' value='%s' />", __('Export Snippets', Peecho::TEXT_DOMAIN));
         echo '</form>';
-
-        // Export logic, and import html form and logic
         $ie->exportSnippets();
         echo $ie->importSnippets();
     }
 
-    /**
-     * Tab for Setting
-     *
-     * @since   Peecho 2.0
-     */
     private function tabSetting()
     {
         $userId = get_option('user_script_id');
-        // Create header and export html form
         printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
         echo '<form method="post" action="">';
         echo '<p>';
@@ -358,14 +257,11 @@ class Peecho_Admin
         echo '</table>';
         printf("<input type='submit' class='button' name='setting' value='%s' />", __('Save Setting', Peecho::TEXT_DOMAIN));
         echo '</form>';
-
-        // Export logic, and import html form and logic
         $this->saveSetting();
     }
 
     private function saveSetting()
     {
-        // Create header and export html form
         if(isset($_POST['setting']))
         {
             if(!empty($_POST['user_id']))
@@ -380,16 +276,7 @@ class Peecho_Admin
             }
         }
     }
-
     
-    /**
-     * Creates a read-only overview page.
-     *
-     * For users with edit_posts capability but without manage_options
-     * capability.
-     *
-     * @since   Post Snippets 1.9.7
-     */
     public function overviewPage()
     {
         // Header
@@ -409,8 +296,6 @@ class Peecho_Admin
         $this->checkbox(__('Display rendered snippets', Peecho::TEXT_DOMAIN), 'render', $render);
         $this->submit('update-peecho-user', __('Update', Peecho::TEXT_DOMAIN));
         echo '</form>';
-
-        // Snippet List
         $snippets = get_option(Peecho::OPTION_KEY);
         if (!empty($snippets)) {
             foreach ($snippets as $key => $snippet) {
@@ -425,9 +310,6 @@ class Peecho_Admin
                 if ($snippet['vars']) {
                     printf("<strong>%s:</strong> {$snippet['vars']}<br/>", __('Variables', Peecho::TEXT_DOMAIN));
                 }
-
-                // echo "<strong>Variables:</strong> {$snippet['vars']}<br/>";
-
                 $options = array();
                 if ($snippet['shortcode']) {
                     array_push($options, 'Shortcode');
@@ -456,20 +338,6 @@ class Peecho_Admin
         echo '</div>';
     }
 
-
-    // -------------------------------------------------------------------------
-    // HTML and Form element methods
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checkbox.
-     *
-     * Renders the HTML for an input checkbox.
-     *
-     * @param   string  $label      The label rendered to screen
-     * @param   string  $name       The unique name and id to identify the input
-     * @param   boolean $checked    If the input is checked or not
-     */
     public static function checkbox($label, $name, $checked)
     {
         echo "<label for=\"{$name}\">";
@@ -481,18 +349,7 @@ class Peecho_Admin
         echo " {$label}</label><br/>";
     }
 
-    /**
-     * Submit.
-     *
-     * Renders the HTML for a submit button.
-     *
-     * @since   Post Snippets 1.9.7
-     * @param   string  $name   The name that identifies the button on submit
-     * @param   string  $label  The label rendered on the button
-     * @param   string  $class  Optional. Button class. Default: button-primary
-     * @param   boolean $wrap   Optional. Wrap in a submit div. Default: true
-     */
-    public static function submit($name, $label, $class = 'button-primary', $wrap = true)
+       public static function submit($name, $label, $class = 'button-primary', $wrap = true)
     {
         $btn = sprintf('<input type="submit" name="%s" value="%s" class="%s" />', $name, $label, $class);
 

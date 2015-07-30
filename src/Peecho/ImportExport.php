@@ -1,28 +1,9 @@
 <?php
-/**
- * Peecho I/O.
- *
- * Class to handle import and export of Snippets.
- *
- * @author   Peecho <artstorm at gmail dot com>
- * @link     http://www.peecho.com/
- */
 class Peecho_ImportExport
 {
     const FILE_CFG = 'peecho-export.cfg';
     const FILE_ZIP = 'peecho-export.zip';
-
     private $downloadUrl;
-
-    /**
-     * Export Snippets.
-     *
-     * Check if an export file shall be created, or if a download url should be
-     * pushed to the footer. Also checks for old export files laying around and
-     * deletes them (for security).
-     *
-     * @return void
-     */
     public function exportSnippets()
     {
         if (isset($_POST['Peecho_export'])) {
@@ -47,13 +28,6 @@ class Peecho_ImportExport
             }
         }
     }
-
-    /**
-     * Handles uploading of post snippets archive and import the snippets.
-     *
-     * @uses   wp_handle_upload() in wp-admin/includes/file.php
-     * @return string HTML to handle the import
-     */
     public function importSnippets()
     {
         $import =
@@ -139,12 +113,6 @@ class Peecho_ImportExport
         }
         return $import;
     }
-
-    /**
-     * Create a zipped filed containing all Post Snippets, for export.
-     *
-     * @return string URL to the exported snippets
-     */
     private function createExportFile()
     {
         $snippets = serialize(get_option(Peecho::OPTION_KEY));
@@ -152,8 +120,6 @@ class Peecho_ImportExport
         $dir = wp_upload_dir();
         $upload_dir = $dir['basedir'] . '/';
         $upload_url = $dir['baseurl'] . '/';
-        
-        // Open a file stream and write the serialized options to it.
         if (!$handle = fopen($upload_dir.'./'.self::FILE_CFG, 'w')) {
             die();
         }
@@ -161,14 +127,10 @@ class Peecho_ImportExport
             die();
         }
         fclose($handle);
-
-        // Create a zip archive
         require_once(ABSPATH . 'wp-admin/includes/class-pclzip.php');
         chdir($upload_dir);
         $zip = new PclZip('./'.self::FILE_ZIP);
         $zipped = $zip->create('./'.self::FILE_CFG);
-
-        // Delete the snippet file
         unlink('./'.self::FILE_CFG);
 
         if (!$zipped) {
@@ -178,11 +140,6 @@ class Peecho_ImportExport
         return $upload_url.'./'.self::FILE_ZIP;
     }
 
-    /**
-     * Generates the javascript to trigger the download of the file.
-     *
-     * @return void
-     */
     public function psnippetsFooter()
     {
         $export = '<script type="text/javascript">
