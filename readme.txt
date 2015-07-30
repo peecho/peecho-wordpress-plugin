@@ -58,4 +58,9 @@ For more information head over to the [Peecho website](http://www.peecho.com) an
 == Changelog ==
 
 = 1.0 =
-* Initial first version
+* Initial first version.
+
+== Upgrade Notice ==
+
+= 1.0 =
+* This is the first version.
