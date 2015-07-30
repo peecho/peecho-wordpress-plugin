@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: peecho
+Contributors: Peecho
 Donate link: http://www.peecho.com/
 Tags: print, publisher, photography
 Requires at least: 4.1.1
