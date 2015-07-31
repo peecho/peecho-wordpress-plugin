@@ -203,7 +203,7 @@ class Peecho_Admin
             <div id="icon-plugins" class="icon32"></div>
             <h2>Peecho</h2>';
         $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'snippets';
-        $base_url = '?page=peecho-wordpress-plugin/peecho.php&amp;tab=';
+        $base_url = '?page=peecho/peecho.php&amp;tab=';
         $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($tabs as $tab => $title) {
@@ -283,7 +283,7 @@ class Peecho_Admin
         echo '<div class="wrap">';
         echo '<h2>Peecho</h2>';
         echo '<p>';
-        _e('This is an overview of all snippets defined for this site. These snippets are inserted into posts from the post editor using the Post Snippets button. You can choose to see the snippets here as-is or as they are actually rendered on the website. Enabling rendered snippets for this overview might look strange if the snippet have dependencies on variables, CSS or other parameters only available on the frontend. If that is the case it is recommended to keep this option disabled.', Peecho::TEXT_DOMAIN);
+        _e('.', Peecho::TEXT_DOMAIN);
         echo '</p>';
 
         // Form
