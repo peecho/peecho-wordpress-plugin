@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: Peecho
 Donate link: http://www.peecho.com/
-Tags: print, publisher, photography
+Tags: print, publisher, photography, print on demand, print books, print magazines, PDF to print
 Requires at least: 4.1.1
 Tested up to: 4.2.3
 Stable tag: trunk
@@ -12,13 +12,11 @@ The Peecho WordPress plug-in will make it easy for WordPress users to include Pe
 
 == Description ==
 
-Sell magazines, books or wall decoration - straight from your own website. The Peecho WordPress plug-in will make it easy for WordPress users to include Peecho print buttons in posts and pages.
+Sell magazines, books or wall decoration - straight from your own website. This WordPress plugin makes it easy for you to offer your digital photos, magazines or publications as print products using Peecho's print on demand network. 
 
-This allows you to offer your digital photos, magazines or publications as physical products, made world wide.
+Simply install the plugin and create a Peecho print button for the products you want to offer. The plugin will then allow you to insert the button code in any post or page from the editor. 
 
-To do so, the plug-in will add a button to the edit menu of posts and pages that will allow the user to insert the corresponding Peecho print button code into the post or page.
-
-The plug-in will furthermore provide a configuration pane where Peecho merchants can create and manage print buttons.
+Creating and managing Peecho print buttons for your Wordpress site has never been easier!
 
 == Installation ==
 
