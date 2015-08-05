@@ -183,6 +183,7 @@ class Peecho_Admin
         $id = get_current_user_id();
         $options = get_user_meta($id, Peecho::USER_META_KEY, true);
         return $options;
+
     }
     private function message($message)
     {
@@ -196,7 +197,6 @@ class Peecho_Admin
         $this->add();
         $this->delete();
         $this->update();
-
         // Header
         echo '
         <!-- Create a header in the default WordPress \'wrap\' container -->
@@ -243,31 +243,35 @@ class Peecho_Admin
     }
 
     private function tabSetting()
-    {
-        $userId = get_option('user_script_id');
+    {   
+        
+
         printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
         echo '<form method="post" action="">';
         echo '<p>';
-        echo'Enter your Peecho button key here to create Peecho print buttons. You can find your Peecho button key on , 
-
-<a href="http://www.peecho.com/dashboard">under Settings Print API</a>
-        ';
+        echo'Enter your Peecho button key here to create Peecho print buttons. You can find your Peecho button key on
+         <a href="http://www.peecho.com/dashboard" target="_blank">"http://www.peecho.com/dashboard"</a>, under Settings  Print API';
         echo '</p>';
          echo '<p>';
+        if(isset($_POST['user_id'])){
+            $userId = $_POST['user_id'];
+            if(empty($_POST['user_id'])){
+                echo '<div style="color:red">Peecho user id shouldn\'t empty</div>';
+            }         
+        }else{
+            $userId = get_option('user_script_id');
+        }
 
          $snippets = get_option(Peecho::OPTION_KEY);
          print_r($snippet);
-         if (empty($snippets)) {
-           echo 'No Peecho print buttons added yet. Click 
-<a href="options-general.php?page=peecho/peecho.php">"Add Button"</a>';
-         }
+         
         
         echo '</p>';
 
         echo '<table>';
 
             echo '<tr>';
-                echo '<td> User ID : </td>';
+                echo '<td>  Peecho Button Key : </td>';
                 echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
                   
             echo '</tr>';
@@ -281,17 +285,25 @@ class Peecho_Admin
     private function saveSetting()
     {
         if(isset($_POST['setting']))
-        {
-            if(!empty($_POST['user_id']))
-            {
+       {
+
                 update_option('user_script_id', $_POST['user_id']);
+               if(!empty($_POST['user_id'])){
                 $this->message(
                     __(
-                        'A Script ID has been added.',
+                        'A Peecho button key has been added.',
                         Peecho::TEXT_DOMAIN
                     )
                 );
-           }
+               }
+                if(empty($_POST['user_id'])){
+                    $_POST['user_id'] = '';
+                }else{
+                    echo '<script>
+                       window.location = "?page=peecho%2Fpeecho.php&tab=snippets";
+                    </script>';
+                    
+                }
         }
     }
     
@@ -379,7 +391,6 @@ class Peecho_Admin
         if ($wrap) {
             $btn = "<div class=\"submit\">{$btn}</div>";
         }
-
         echo $btn;
     }
 
