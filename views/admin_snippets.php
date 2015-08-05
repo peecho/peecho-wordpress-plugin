@@ -1,3 +1,4 @@
+
 <form method="post" action="">
     <?php wp_nonce_field('update_snippets', 'update_snippets_nonce'); ?>
 
@@ -25,7 +26,7 @@ if (!empty($snippets)) {
     foreach ($snippets as $key => $snippet) {
         ?>
             <tr class='recent'>
-            <th scope='row' class='check-column'><input type='checkbox'  name='checked[true]' value='<?php echo $key;
+            <th scope='row' class='check-column'><input type='checkbox'  name='checked[]' value='<?php echo $key;
         ?>' /></th>
             <td class='row-title'>
             <input type='text' name='<?php echo $key;
@@ -34,7 +35,7 @@ if (!empty($snippets)) {
             </td>
             <td class='name'>
             <?php
-            Peecho_Admin::checkbox(__('Shortcode', Peecho::TEXT_DOMAIN), $key.'_shortcode',
+            Peecho_Admin::checkbox(__('', Peecho::TEXT_DOMAIN), $key.'_shortcode',
                             $snippet['shortcode']);
         ?>
             </td>
@@ -52,7 +53,23 @@ if (!empty($snippets)) {
         </tbody>
     </table>
 <?php
+
+
         Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
-        Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false);
+       
+        $userId = get_option('user_script_id');
+        if(empty($userId)){
+           echo ' First, enter your Peecho button key under Settings to be able to create Peecho print buttons.
+           <a href="options-general.php?page=peecho/peecho.php&&tab=tools">"Setting"</a></br> ';
+            
+        }
+
+
+        $userId = get_option('user_script_id');
+        if(!empty($userId)){
+            Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false);
+        }else{
+            Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false,true);
+        }
         Peecho_Admin::submit('delete-snippets', __('Delete Selected', Peecho::TEXT_DOMAIN), 'button-secondary', false);
         echo '</form>';
