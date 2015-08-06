@@ -1,8 +1,11 @@
 <?php // Setup the dialog divs ?>
+       
 <div class="hidden">
     <div id="peecho-dialog" title="Insert Peecho Print Button">
+
         <?php // Init the tabs div ?>
         <div id="peecho-tabs">
+
             <h2 id="peechonav">Choose Button</h2>
             <ol class="peechoselect">
                 <?php
@@ -17,7 +20,21 @@
 					<?php echo ucwords($snippet['title']); ?></a></li>
                 <?php 
                 } ?>
+
+                 <?php
+                 $userId = get_option('user_script_id');
+                if(empty($userId)){
+                   echo '<div style="color:red"> First, enter your Peecho button key under <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings</a> to be able to create Peecho print buttons.
+                    </div>';
+                 }else{
+                    if(count($snippets) == 0){
+                        echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click <a href="options-general.php?page=peecho%2Fpeecho.php&tab=snippets"> "Add Button"</div> </td></tr>';
+                    }
+
+                }?>
+
             </ol>
+             
             <?php
             foreach ($snippets as $key => $snippet) {
                 ?>
@@ -64,8 +81,9 @@
                 </div>
             <?php 
             } ?>
-        </div>
-    </div>
+    
+
+                </div>
 </div>
 <style>
 #peechonav {
