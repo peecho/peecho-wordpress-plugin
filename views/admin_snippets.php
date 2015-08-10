@@ -55,12 +55,12 @@ if (!empty($snippets)) {
 }       else{
         $userId = get_option('user_script_id');
                 if(empty($userId)){
-                   echo '<tr><td colspan="3"><div style="color:red"> First, enter your Peecho button key under <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings</a> to be able to create Peecho print buttons.
+                   echo '<tr><td colspan="3"><div style="color:red"> You haven\'t created any print buttons yet. To create a button, go to the plugin  <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings.</a> 
                     </div></td></tr>';
                     
                 }else{
 
-            echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button"</div> </td></tr>';
+            echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click Add Button</div> </td></tr>';
         }
 }
         ?>   
