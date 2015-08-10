@@ -8,9 +8,15 @@
             <th scope="col" class="check-column"><input type="checkbox" /></th>
             <th scope="col" style="width: 180px;"><?php _e('Title', Peecho::TEXT_DOMAIN); ?></th>
             <th></th>
-            <th scope="col"><?php _e('Snippet', Peecho::TEXT_DOMAIN); ?></th>
+            <th scope="col"><?php _e('Snippet', Peecho::TEXT_DOMAIN); ?></th> 
         </tr>
         </thead>
+        <?php
+        
+       
+         
+        ?>
+             
         <tfoot>
         <tr>
             <th scope="col" class="check-column"><input type="checkbox" /></th>
@@ -22,6 +28,7 @@
         <tbody>
 <?php 
 $snippets = get_option(Peecho::OPTION_KEY);
+  
 if (!empty($snippets)) {
     foreach ($snippets as $key => $snippet) {
         ?>
@@ -48,22 +55,28 @@ if (!empty($snippets)) {
             </tr>
         <?php
     }
+}else{
+$userId = get_option('user_script_id');
+        if(empty($userId)){
+           echo '<tr><td colspan="3"> First, enter your Peecho button key under Settings to be able to create Peecho print buttons.
+           <a href="options-general.php?page=peecho/peecho.php&&tab=tools">"Setting"</a></br> </td></tr>';
+            
+        }else{
+
+    echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button"</div> </td></tr>';
 }
-        ?>
+}
+        ?>   
         </tbody>
+
     </table>
+
 <?php
 
 
         Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
        
-        $userId = get_option('user_script_id');
-        if(empty($userId)){
-           echo ' First, enter your Peecho button key under Settings to be able to create Peecho print buttons.
-           <a href="options-general.php?page=peecho/peecho.php&&tab=tools">"Setting"</a></br> ';
-            
-        }
-
+        
 
         $userId = get_option('user_script_id');
         if(!empty($userId)){
