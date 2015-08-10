@@ -16,7 +16,7 @@ class Peecho_Admin
         $pluginFile .= '/peecho.php';
 
         if ($file == $pluginFile) {
-            $url = 'options-general.php?page=peecho-wordpress-plugin/peecho.php';
+            $url = 'options-general.php?page=peecho/peecho.php';
             $link = "<a href='{$url}'>";
             $link .= __('Settings', Peecho::TEXT_DOMAIN).'</a>';
             $links[] = $link;
@@ -110,6 +110,7 @@ class Peecho_Admin
             }
 
             $delete = $_POST['checked'];
+
             $newsnippets = array();
             foreach ($snippets as $key => $snippet) {
                 if (in_array($key, $delete) == false) {
@@ -247,14 +248,31 @@ class Peecho_Admin
         printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
         echo '<form method="post" action="">';
         echo '<p>';
-        _e('Enter your Peecho ID for create Peecho Print Button.', Peecho::TEXT_DOMAIN);
+        echo'Enter your Peecho button key here to create Peecho print buttons. You can find your Peecho button key on , 
+
+<a href="http://www.peecho.com/dashboard">under Settings Print API</a>
+        ';
         echo '</p>';
+         echo '<p>';
+
+         $snippets = get_option(Peecho::OPTION_KEY);
+         print_r($snippet);
+         if (empty($snippets)) {
+           echo 'No Peecho print buttons added yet. Click 
+<a href="options-general.php?page=peecho/peecho.php">"Add Button"</a>';
+         }
+        
+        echo '</p>';
+
         echo '<table>';
+
             echo '<tr>';
                 echo '<td> User ID : </td>';
                 echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
+                  
             echo '</tr>';
         echo '</table>';
+
         printf("<input type='submit' class='button' name='setting' value='%s' />", __('Save Setting', Peecho::TEXT_DOMAIN));
         echo '</form>';
         $this->saveSetting();
@@ -273,7 +291,7 @@ class Peecho_Admin
                         Peecho::TEXT_DOMAIN
                     )
                 );
-            }
+           }
         }
     }
     
@@ -306,7 +324,6 @@ class Peecho_Admin
                     echo "<span class='description'> {$snippet['description']}</span>";
                 }
                 echo "</h3>";
-
                 if ($snippet['vars']) {
                     printf("<strong>%s:</strong> {$snippet['vars']}<br/>", __('Variables', Peecho::TEXT_DOMAIN));
                 }
@@ -341,17 +358,23 @@ class Peecho_Admin
     public static function checkbox($label, $name, $checked)
     {
         echo "<label for=\"{$name}\">";
-        printf('<input type="checkbox" name="%1$s" id="%1$s" value="true"', $name);
-        if ($checked) {
+        printf('<input type="checkbox" style="Display:none;" name="%1$s" id="%1$s" value="true"', $name);
+        
+        //if ($checked) {
             echo ' checked';
-        }
+      // }
         echo ' />';
         echo " {$label}</label><br/>";
     }
 
-       public static function submit($name, $label, $class = 'button-primary', $wrap = true)
-    {
-        $btn = sprintf('<input type="submit" name="%s" value="%s" class="%s" />', $name, $label, $class);
+       public static function submit($name, $label, $class = 'button-primary', $wrap = true, $disable = false)
+    {   
+        if($disable == true){
+            $buttondisble = 'disabled';
+        }else{
+            $buttondisble = '';
+        }
+        $btn = sprintf('<input type="submit" name="%s" value="%s" class="%s" '.$buttondisble.' />', $name, $label, $class);
 
         if ($wrap) {
             $btn = "<div class=\"submit\">{$btn}</div>";
