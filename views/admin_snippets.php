@@ -12,9 +12,6 @@
         </tr>
         </thead>
         <?php
-        
-       
-         
         ?>
              
         <tfoot>
@@ -50,34 +47,28 @@ if (!empty($snippets)) {
             <textarea name="<?php echo $key;
         ?>_snippet" class="large-text" style='width: 100%;' rows="5"><?php echo htmlspecialchars($snippet['snippet'], ENT_NOQUOTES);
         ?></textarea>
+       <div >Enter your Peecho button code here. You can find your Peecho button key on <a href="http://www.peecho.com/dashboard"  target="_blank">http://www.peecho.com/dashboard </a>, under Publications > Details > Print button</div> </td></tr>
             <br/>
-            </td>
-            </tr>
+            
         <?php
     }
-}else{
-$userId = get_option('user_script_id');
-        if(empty($userId)){
-           echo '<tr><td colspan="3"> First, enter your Peecho button key under Settings to be able to create Peecho print buttons.
-           <a href="options-general.php?page=peecho/peecho.php&&tab=tools">"Setting"</a></br> </td></tr>';
-            
-        }else{
+}       else{
+        $userId = get_option('user_script_id');
+                if(empty($userId)){
+                   echo '<tr><td colspan="3"><div style="color:red"> First, enter your Peecho button key under <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings</a> to be able to create Peecho print buttons.
+                    </div></td></tr>';
+                    
+                }else{
 
-    echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button"</div> </td></tr>';
-}
+            echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button"</div> </td></tr>';
+        }
 }
         ?>   
         </tbody>
-
     </table>
 
 <?php
-
-
         Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
-       
-        
-
         $userId = get_option('user_script_id');
         if(!empty($userId)){
             Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false);
