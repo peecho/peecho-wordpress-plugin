@@ -84,7 +84,7 @@ class Peecho_Admin
             update_option(Peecho::OPTION_KEY, $snippets);
             $this->message(
                 __(
-                    'A snippet named Untitled has been added.',
+                    'You have created a new Untitled button, you can now add your button title and code.',
                     Peecho::TEXT_DOMAIN
                 )
             );
@@ -250,13 +250,13 @@ class Peecho_Admin
         echo '<form method="post" action="">';
         echo '<p>';
         echo'Enter your Peecho button key here to create Peecho print buttons. You can find your Peecho button key on
-         <a href="http://www.peecho.com/dashboard" target="_blank">http://www.peecho.com/dashboard</a>, under Settings  Print API';
+         <a href="http://www.peecho.com/dashboard" target="_blank">http://www.peecho.com/dashboard</a>, under Settings  >  Print API';
         echo '</p>';
          echo '<p>';
         if(isset($_POST['user_id'])){
             $userId = $_POST['user_id'];
             if(empty($_POST['user_id'])){
-                echo '<div style="color:red">Peecho peecho button key shouldn\'t empty</div>';
+                echo '<div style="color:red">Peecho button key shouldn\'t empty</div>';
             }         
         }else{
             $userId = get_option('user_script_id');

@@ -28,7 +28,7 @@
                     </div>';
                  }else{
                     if(count($snippets) == 0){
-                        echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click <a href="options-general.php?page=peecho%2Fpeecho.php&tab=snippets"> "Add Button"</div> </td></tr>';
+                        echo '<div style="color:red"> You haven\'t created any print buttons yet. To create a button, go to the plugin  <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings</a>.';
                     }
 
                 }?>
