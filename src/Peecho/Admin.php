@@ -7,7 +7,7 @@ class Peecho_Admin
         add_filter('plugin_action_links', array(&$this, 'actionLinks'), 10, 2);
         add_action('admin_menu', array(&$this, 'menu'));
         add_action('current_screen', array(&$this, 'addHeaderXss'));
-        add_action( 'wp_head', array(&$this ,'scriptFunction') );
+        add_action( 'wp_footer', array(&$this ,'scriptFunction') );
     }
 
     public function actionLinks($links, $file)
@@ -133,6 +133,9 @@ class Peecho_Admin
      */
     private function update()
     {
+		
+		//print_r($_POST);
+		//die();
         if (isset($_POST['update-snippets'])
             && isset($_POST['update_snippets_nonce'])
             && wp_verify_nonce($_POST['update_snippets_nonce'], 'update_snippets')
@@ -154,7 +157,57 @@ class Peecho_Admin
 
                     $new_snippets[$key]['snippet'] = wp_specialchars_decode(trim(stripslashes($_POST[$key.'_snippet'])), ENT_NOQUOTES);
                     $new_snippets[$key]['description'] = wp_specialchars_decode(trim(stripslashes($_POST[$key.'_description'])), ENT_NOQUOTES);
+					
+					$userId = get_option('user_script_id');
+		
+					if(!empty($_POST['image_url']["'".$key."'"])){
+						
+						$imgurl =  $_POST['image_url']["'".$key."'"];
+						$apikey =  get_option('user_script_id');
+						$url = "http://www.peecho.com/rest/storage/createPublicationFromUpload";
+						$postvars = "sourceUrl=" . $imgurl . "&applicationApiKey=".$apikey ;
+
+						$temp = curl_init($url);
+						curl_setopt($temp, CURLOPT_POST, 1);
+						curl_setopt($temp, CURLOPT_POSTFIELDS, $postvars);
+						curl_setopt($temp, CURLOPT_FOLLOWLOCATION, 1);
+						curl_setopt($temp, CURLOPT_HEADER, 0);
+						curl_setopt($temp, CURLOPT_RETURNTRANSFER, 1);						
+						curl_setopt($temp, CURLOPT_URL,$url);
+						$resultnew = curl_exec($temp);
+						
+						curl_close($temp);
+						$finalresult = json_decode($resultnew);
+						$publicationid = $finalresult->publicationId;
+						
+						$state = 'PROCESSING';
+						do{
+							$ch = curl_init();
+							$url = "http://www.peecho.com/rest/storage/details?publicationId=".$publicationid;
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_URL,$url);
+							$mesagestatus = curl_exec($ch);
+							curl_close($ch);						
+							$message = json_decode($mesagestatus);
+						    $state = $message->state;
+							if($state == 'DONE'){
+								
+								$type = $message->filetype;
+								$width = $message->width;
+							    $height = $message->height;
+								$noofpage = $message->numberofpages;
+								
+								$snippetsvalue = '<a title="Peecho" href="http://www.peecho.com/" class="peecho-print-button" data-filetype="'.$type.'" data-width="'.$width.'" data-height="'.$height.'" data-pages="'.$noofpage.'" data-publication="'.$publicationid.'">Print</a>
+	';
+								$new_snippets[$key]['snippet'] = wp_specialchars_decode(trim(stripslashes($snippetsvalue)), ENT_NOQUOTES);								
+							}
+						}while($state == 'PROCESSING');
+						
+					}
+					
                 }
+				
+				//die();
                 update_option(Peecho::OPTION_KEY, $new_snippets);
                 $this->message(__('Snippets have been updated.', Peecho::TEXT_DOMAIN));
             }
@@ -172,7 +225,7 @@ class Peecho_Admin
     {
         if (isset($_POST['post_snippets_user_nonce'])
             && wp_verify_nonce($_POST['post_snippets_user_nonce'], 'post_snippets_user_options')
-        ) {
+        ){
             $id = get_current_user_id();
             $render = isset($_POST['render']) ? true : false;
             update_user_meta($id, Peecho::USER_META_KEY, $render);
@@ -261,6 +314,14 @@ class Peecho_Admin
         }else{
             $userId = get_option('user_script_id');
         }
+        if(isset($_POST['peecho_button_id'])){
+            $buttonId = $_POST['peecho_button_id'];
+            if(empty($_POST['peecho_button_id'])){
+                echo '<div style="color:red">Peecho button key shouldn\'t empty</div>';
+            }         
+        }else{
+            $buttonId = get_option('peecho_button_id');
+        }
 
          $snippets = get_option(Peecho::OPTION_KEY);
          print_r($snippet);
@@ -271,8 +332,13 @@ class Peecho_Admin
         echo '<table>';
 
             echo '<tr>';
-                echo '<td>  Peecho Button Key : </td>';
+                echo '<td>  Application Key : </td>';
                 echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
+                  
+            echo '</tr>';
+            echo '<tr>';
+                echo '<td>  Peecho Button Key : </td>';
+                echo '<td><input type="text" name="peecho_button_id" value="'.$buttonId.'"></td>';
                   
             echo '</tr>';
         echo '</table>';
@@ -286,7 +352,14 @@ class Peecho_Admin
     {
         if(isset($_POST['setting']))
        {
-
+		   
+				if(!get_option( 'peecho_button_id' ) ) {
+					add_option( 'peecho_button_id', '255', '', 'yes' );
+					update_option( 'peecho_button_id', $_POST['peecho_button_id'] );
+				}else {
+					update_option( 'peecho_button_id', $_POST['peecho_button_id'] );
+				}
+				
                 update_option('user_script_id', $_POST['user_id']);
                if(!empty($_POST['user_id'])){
                 $this->message(
@@ -395,8 +468,7 @@ class Peecho_Admin
     }
 
     public function scriptFunction(){
-
-        $userId = get_option('user_script_id');
+        $userId = get_option('peecho_button_id'); //get_option('user_script_id');
         echo '<script type="text/javascript">
            var p=document.createElement("script");p.type="text/javascript";p.async=true;
            var h=("https:"==document.location.protocol?"https://":"http://");
