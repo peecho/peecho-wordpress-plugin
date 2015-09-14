@@ -1,8 +1,8 @@
 
-<form method="post" action="">
+<form method="post" action="" id="peecho-form">
     <?php wp_nonce_field('update_snippets', 'update_snippets_nonce'); ?>
 
-    <table class="widefat fixed" cellspacing="0">
+    <table class="widefat fixed" id="peecho-plugin-upload" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col" class="check-column"><input type="checkbox" /></th>
@@ -53,8 +53,8 @@ if (!empty($snippets)) {
     ?>
     <div>
        
-        <input type="text" name="image_url['<?php echo $key; ?>']" id="image_url_<?php echo $key; ?>" class="">
-        <input type="button" name="upload-btn" id="upload-btn-<?php echo $key; ?>" onclick="fileupload('<?php echo $key; ?>')" class="button-secondary" value="Upload Image">
+        <input type="text" style="display:none" name="image_url['<?php echo $key; ?>']" id="image_url_<?php echo $key; ?>" class="">
+        <input type="button" name="upload-btn" id="upload-btn-<?php echo $key; ?>" onclick="fileupload('<?php echo $key; ?>')" class="button-secondary" value="Upload publication">
     </div>
             
        </td>
@@ -80,31 +80,24 @@ if (!empty($snippets)) {
     
 <script type="text/javascript">
 	function fileupload(id){
-		console.log(jQuery('#upload-btn-'+id));
-		jQuery('#upload-btn-'+id).click(function(e) {
-			e.preventDefault();
-			var image = wp.media({ 
-				title: 'Upload Image',
-				//mutiple: true if you want to upload multiple files at once
-				multiple: false
-			}).open()
-			.on('select', function(e){
-				// This will return the selected image from the Media Uploader, the result is an object
-				var uploaded_image = image.state().get('selection').first();
-				// We convert uploaded_image to a JSON object to make accessing it easier
-				// Output to the console uploaded_image
-				console.log(uploaded_image);
-				var image_url = uploaded_image.toJSON().url;
-				// Let's assign the url value to the input field
-				jQuery('#image_url_'+id).val(image_url);
-				
-			});
+		var image = wp.media({ 
+			title: 'Upload Image',
+			//mutiple: true if you want to upload multiple files at once
+			multiple: false
+		}).open().on('select', function(e){
+			var uploaded_image = image.state().get('selection').first();
+			var image_url = uploaded_image.toJSON().url;
+			jQuery('#image_url_'+id).val(image_url);
+			setTimeout(function(){jQuery('#peecho-form').submit();},1000);
 		});
-	}			
+	}
+	
 </script>   
     
-
+<input class="" type="hidden" value="Update Button" name="update-snippets">
 <?php
+
+
         Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
         $userId = get_option('user_script_id');
         if(!empty($userId)){
