@@ -13,7 +13,7 @@ The Peecho WordPress plug-in will make it easy for WordPress users to include Pe
 == Description ==
 
 Sell magazines, books or wall decoration - straight from your own website. This WordPress plugin makes it easy for you to offer your digital photos, magazines or publications as print products using Peecho's print on demand network. 
-
+ 
 Simply install the plugin and create a Peecho print button for the products you want to offer. The plugin will then allow you to insert the button code in any post or page from the editor. 
 
 Creating and managing Peecho print buttons for your Wordpress site has never been easier!

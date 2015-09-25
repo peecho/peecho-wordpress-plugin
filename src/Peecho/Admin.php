@@ -302,14 +302,14 @@ class Peecho_Admin
         printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
         echo '<form method="post" action="">';
         echo '<p>';
-        echo'Enter your Application API Key and Peecho button key here to create Peecho print buttons. You can find both keys on
-         <a href="http://www.peecho.com/dashboard" target="_blank">http://www.peecho.com/dashboard</a>, under under Settings > Keys';
+        echo'Enter your Peecho button key here to create Peecho print buttons. You can find your Peecho button key on
+         <a href="http://www.peecho.com/dashboard" target="_blank">http://www.peecho.com/dashboard</a>, under Settings  >  Print API';
         echo '</p>';
          echo '<p>';
         if(isset($_POST['user_id'])){
             $userId = $_POST['user_id'];
             if(empty($_POST['user_id'])){
-                echo '<div style="color:red">Application API key shouldn\'t empty</div>';
+                echo '<div style="color:red">Peecho button key shouldn\'t empty</div>';
             }         
         }else{
             $userId = get_option('user_script_id');
@@ -332,7 +332,7 @@ class Peecho_Admin
         echo '<table>';
 
             echo '<tr>';
-                echo '<td>  Application Api Key : </td>';
+                echo '<td>  Application Key : </td>';
                 echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
                   
             echo '</tr>';
