@@ -31,7 +31,11 @@ $dir = plugin_dir_url( __FILE__ );
 $snippets = get_option(Peecho::OPTION_KEY);
   
 if (!empty($snippets)) {
+	
+	$getedit = explode(",",urldecode($_GET['snippet']));
     foreach ($snippets as $key => $snippet) {
+		if (in_array($key,$getedit)) {
+				
         ?>
             <tr class='recent'>
             <th scope='row' class='check-column'><input type='checkbox'  name='checked[]' value='<?php echo $key;
@@ -39,7 +43,7 @@ if (!empty($snippets)) {
             <td class='row-title'>
             <input type='text' name='<?php echo $key;
         ?>_title' value='<?php echo $snippet['title'];
-        ?>' />
+        ?>' /> 
             </td>
             <td class='name'>
             <?php
@@ -76,6 +80,7 @@ if (!empty($snippets)) {
             <br/>
             
         <?php
+		}
     }
 }       else{
         $userId = get_option('user_script_id');
@@ -86,9 +91,11 @@ if (!empty($snippets)) {
 			echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button" to create your first print button.</div> </td></tr>';
         }
 }
-        ?>   
+        ?> 
+          
         </tbody>
     </table>
+    
  <style>
 	.mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
 		display: none !important;
@@ -122,19 +129,11 @@ if (!empty($snippets)) {
 			setTimeout(function(){jQuery('#peecho-form').submit();},1000);
 		});
 	}
-</script>   
+</script>    
     
 <input class="" type="hidden" value="Update Button" name="update-snippets">
 <?php
-
-
-        Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
-        $userId = get_option('user_script_id');
-        if(!empty($userId)){
-            Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false);
-        }else{
-            Peecho_Admin::submit('add-snippet', __('Add Button', Peecho::TEXT_DOMAIN), 'button-secondary', false,true);
-        }
-        Peecho_Admin::submit('delete-snippets', __('Delete Selected', Peecho::TEXT_DOMAIN), 'button-secondary', false);
-        echo '</form>';
-		
+	Peecho_Admin::submit('update-snippets', __('Update Button', Peecho::TEXT_DOMAIN));
+	echo '</form>';
+?>
+	

@@ -1,24 +1,23 @@
 <?php
 /*
-Plugin Name: Peecho
-Plugin URI: https://wordpress.org/plugins/
-Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
-Author: Peecho
-Author URI: http://www.peecho.com/
-Version: 1.0
-License: GPLv2 or later 
-Text Domain: peecho
-
-Copyright 2009-2015 Peecho  (email : artstorm [at] gmail [dot] com)
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
+	Plugin Name: Peecho
+	Plugin URI: https://wordpress.org/plugins/
+	Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
+	Author: Peecho
+	Author URI: http://www.peecho.com/
+	Version: 1.0
+	License: GPLv2 or later 
+	Text Domain: peecho
+	
+	Copyright 2009-2015 Peecho  (email : artstorm [at] gmail [dot] com)
+	
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 */
 
 /** Load all of the necessary class files for the plugin */
@@ -191,4 +190,78 @@ class Peecho{
     }
 }
 
-add_action('plugins_loaded', array('Peecho', 'getInstance'));
+
+
+
+
+/*add_action('admin_menu', 'sep_menuexample_create_menu' );
+function sep_menuexample_create_menu() {
+
+add_menu_page( 'My Plugin Settings Page', 'Menu Example Settings','manage_options', __FILE__, 'sep_menuexample_settings_page',screen_icon('edit'))
+;
+}
+function sep_menuexample_settings_page(){
+    echo "<br>";
+    echo "THIS IS SETTINGS PAGE";
+}*/
+
+
+/*add_action('admin_menu', 'my_menu_pages');
+function my_menu_pages(){
+    add_menu_page('My Page Title', 'Peecho', 'manage_options', 'my-menu', 'my_menu_output' );
+    add_submenu_page('my-menu', 'Submenu Page Title', 'Setting', 'manage_options', 'my-menu' );
+    add_submenu_page('my-menu', 'Submenu Page Title2', 'Peecho Button', 'manage_options', 'my-menu2' );
+} 
+
+function my_menu_output(){
+	 global $wpdb;
+	 echo "sdgvsd";
+	}*/
+
+
+add_action( 'admin_menu', 'register_my_custom_menu_page' );
+add_action( 'admin_menu', 'register_my_custom_submenu_page' );
+function register_my_custom_menu_page(){
+    add_menu_page( 'Settings', 'Peecho', 'manage_options', 'customteam', 'my_custom_menu_page'); 
+}
+function register_my_custom_submenu_page() {
+    add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'buttons', 'my_custom_submenu_page' ); 
+    add_submenu_page( 'customteam', 'Setting', 'Setting', 'manage_options', 'settings', 'my_custom_submenu_page_2' );
+    
+}
+function my_custom_menu_page() {
+   global $wpdb;
+   echo '<p><h1>Peecho: Buttons</h1></p>';
+			require_once('views/button.php');
+}
+function my_custom_submenu_page(){
+	global $wpdb;
+	echo '<p><h1>Peecho: Buttons</h1></p>';
+	require_once('views/button.php');
+}
+function my_custom_submenu_page_2(){
+	global $wpdb;
+	echo '<script>
+	  window.location = "?page=peecho%2Fpeecho.php&tab=tools";
+	</script>';
+}
+
+
+
+
+ function my_admin_notice(){
+    global $pagenow;
+				if ( $pagenow == 'plugins.php' ) {
+				$userId = get_option('user_script_id');
+				$buttonId = get_option('peecho_button_id');
+				if($userId == '' && $buttonId == ''){
+					
+					 echo '<div class="updated" style="background-color:#73A477;">
+						<div><img src="../wp-includes/images/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="../wp-admin/options-general.php?page=peecho%2Fpeecho.php&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
+					 </div>';
+				}
+			}
+}
+add_action('admin_notices', 'my_admin_notice');
+
+add_action('plugins_loaded', array('Peecho', 'getInstance'));  

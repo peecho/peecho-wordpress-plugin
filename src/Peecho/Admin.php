@@ -67,7 +67,6 @@ class Peecho_Admin
             if (empty($snippets)) {
                 $snippets = array();
             }
-
             array_push(
                 $snippets,
                 array(
@@ -258,13 +257,13 @@ class Peecho_Admin
             <h2>Peecho</h2>';
         $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'snippets';
         $base_url = '?page=peecho/peecho.php&amp;tab=';
-        $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
+       /* $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper">';
         foreach ($tabs as $tab => $title) {
             $active = ($active_tab == $tab) ? ' nav-tab-active' : '';
             echo "<a href='{$base_url}{$tab}' class='nav-tab {$active}'>{$title}</a>";
         }
-        echo '</h2>';
+        echo '</h2>';*/
         echo '<p class="description">';
        // _e('Use the help dropdown button for additional information.', Peecho::TEXT_DOMAIN);
         echo '</p>';
@@ -295,21 +294,45 @@ class Peecho_Admin
         echo $ie->importSnippets();
     }
 
-    private function tabSetting()
+    private function tabSetting() 
     {   
         
-
-        printf("<h3>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
+            
+        printf("<h3 style='background-color:white;padding:10px;'>%s</h3>", __('Setting Option', Peecho::TEXT_DOMAIN));
+		
+		 if(isset($_POST['user_id']) || isset($_POST['peecho_button_id'])){
+            $userId = $_POST['user_id'];
+		    $peecho_button_id  = $_POST['peecho_button_id']; 
+            if(!empty($_POST['user_id']) || !empty($_POST['peecho_button_id']) ){
+	echo '<div id="u85" class="text" style="margin-left:149px;margin-top: -32px; background-color:#73A477;padding-bottom: 2px; padding-top: 2px; width: 9%; padding-left: 31px; color: #fff;">Connected</div>';  				  }         
+         }else{
+		echo '<div id="u84" class="text" style=" color: #fff; margin-left: 149px;  margin-top: -35px;padding: 2px 14px;width: 9%; background-color:#999; ">&nbspNot Connected</div>';    
+         }
+		
+		   
         echo '<form method="post" action="">';
-        echo '<p>';
-        echo'Enter your Application API Key and Peecho button key here to create Peecho print buttons. You can find both keys on
-         <a href="http://www.peecho.com/dashboard" target="_blank">http://www.peecho.com/dashboard</a>, under under Settings > Keys';
-        echo '</p>';
+        echo '<p align="right">';
+        echo'<div  style="background-color: rgb(115, 164, 119); float: right; height: auto; width: 25%;color: #fff; padding:10px;" float="right" ><div class="ax_paragraph" id="u70">
+		<p>
+       <img src="../wp-content/plugins/peecho/image/peecho.png" class="img " id="u70_img">
+           <span style="font: bold; font-size: 21px">Why Peecho</span>
+       </p>
+        <div>
+          <p><span style=" font-size: 14px;font-weight:700;">The highest quality</span><span style="font-size: 13px;;font-weight:400;"></span></p><p><span style="font-size: 13px;;font-weight:400;">Our print facility network consists of only the best facilities in the world.</span></p>
+		  <p><span style=" font-size: 14px;;font-weight:700;">Super simple integration</span></p>
+		  <p><span style="font-size: 13px;;font-weight:400;">Our software is really easy to integrate, embedding our print button just takes one line of code!</span></p><span style=" font-size: 14px;;font-weight:700;">One stop shop</span></span></p>
+		  <p><span style="font-size: 13px;;font-weight:400;">We take care of checkout, payment, production and shipping. And we take care of customer service. All free.</span></p>
+        </div>
+      </div>';
+		echo '</div>';
+		
          echo '<p>';
+		 
         if(isset($_POST['user_id'])){
             $userId = $_POST['user_id'];
             if(empty($_POST['user_id'])){
-                echo '<div style="color:red">Application API key shouldn\'t empty</div>';
+				 //echo '<div style="color:red">Application API key shouldn\'t empty</div>';
+               echo '<div id="u84" class="text" style=" color: #fff; margin-left: 149px;  margin-top: -35px;padding: 2px 14px;width: 9%; background-color:#999; ">&nbspNot Connected</div>'; 
             }         
         }else{
             $userId = get_option('user_script_id');
@@ -317,7 +340,7 @@ class Peecho_Admin
         if(isset($_POST['peecho_button_id'])){
             $buttonId = $_POST['peecho_button_id'];
             if(empty($_POST['peecho_button_id'])){
-                echo '<div style="color:red">Peecho button key shouldn\'t empty</div>';
+                //echo '<div style="color:red">Peecho button key shouldn\'t empty</div>';
             }         
         }else{
             $buttonId = get_option('peecho_button_id');
@@ -329,23 +352,33 @@ class Peecho_Admin
         
         echo '</p>';
 
-        echo '<table>';
+        echo '<div style="background-color:#FFF; padding:20px; width:65%;" >';
 
-            echo '<tr>';
-                echo '<td>  Application Api Key : </td>';
-                echo '<td><input type="text" name="user_id" value="'.$userId.'"></td>';
+           
+                echo '<div>  Application Api Key : ';
+                echo '<input type="text" name="user_id" value="'.$userId.'"> </div></br><a href="http://www.peecho.com/dashboard"><div style="margin-left:126px;">Get your API Key here</div></a>';
+                echo '</br><div>  Peecho Button Key : </td>';
+                echo '<input type="text" name="peecho_button_id" value="'.$buttonId.'"></div>';
                   
-            echo '</tr>';
-            echo '<tr>';
-                echo '<td>  Peecho Button Key : </td>';
-                echo '<td><input type="text" name="peecho_button_id" value="'.$buttonId.'"></td>';
-                  
-            echo '</tr>';
-        echo '</table>';
+           
+        
 
-        printf("<input type='submit' class='button' name='setting' value='%s' />", __('Save Setting', Peecho::TEXT_DOMAIN));
-        echo '</form>';
-        $this->saveSetting();
+				printf("<input type='submit'  class='button' name='setting' value='%s' />", __('Save Setting', Peecho::TEXT_DOMAIN));
+				echo '</form>';
+				$this->saveSetting();
+				
+				echo '<p style="float: right;margin-right: 50px; margin-top:22px; "><a href="http://www.peecho.com/en/documentation/print-button"> Peecho documentation page </a> </p>';
+		echo '</div>';
+		echo '<div style="float: right; margin-top:265px; margin-right: -670px;width: 29%">
+			<span  style="color: black; font-size: 20px;">Looking for help?</br></span>
+				<p>
+				  Маке sure to look at the <a href="http://www.peecho.com/en/documentation/print-button"> Peecho Documentation,</br> 
+				  FAQ </a> and contact<a href="http://www.peecho.com/en/documentation/print-button"> support@peecho.com </a>if you have any questions.
+				</p>
+			</span>
+                ';
+		echo '</div>';
+		
     }
 
     private function saveSetting()
@@ -362,22 +395,26 @@ class Peecho_Admin
 				
                 update_option('user_script_id', $_POST['user_id']);
                if(!empty($_POST['user_id'])){
-                $this->message(
+             $this->message(
                     __(
-                        'A Peecho button key has been added.',
+                     'API Key and Button Key added. You can edit your buttons <a href="http://nwaresoft.com/peecho/8-2/" >here</a>',
                         Peecho::TEXT_DOMAIN
                     )
                 );
+				
                }
                 if(empty($_POST['user_id'])){
                     $_POST['user_id'] = '';
                 }else{
-                    echo '<script>
-                       window.location = "?page=peecho%2Fpeecho.php&tab=snippets";
-                    </script>';
+					
+					
+                  /*  echo '<script>
+                       window.location = "?page=peecho%2Fpeecho.php&tab=tools";
+                    </script>';*/
                     
                 }
         }
+		
     }
     
     public function overviewPage()
@@ -478,3 +515,4 @@ class Peecho_Admin
         
     }
 }
+?>
