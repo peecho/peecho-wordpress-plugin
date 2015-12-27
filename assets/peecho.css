@@ -27,6 +27,279 @@
 #peecho-snippets-tabs .ui-tabs-hide {
 }
 
-
 #peecho-snippets-dialog label {
+}
+.min-stng .cnt {
+  background-color: #73a477;
+  color: #fff;
+  display: inline-block;
+  line-height: 19px;
+  margin-left: 50px;
+  padding: 3px 14px 5px;
+  margin-top: 13px;
+  width: 9%;
+  float: left;
+  text-align: center;
+}
+
+.min-stng .nt-cnt{
+	background-color: #808080;
+	color: #fff;
+  display: inline-block;
+  left: 104px;
+  line-height: 19px;
+  margin-left: 50px;
+  padding: 3px 14px 5px;
+  top: 148px;
+  width: 9%;
+  float: left;
+  margin-top: 13px;
+  text-align: center;
+}
+
+.min-stng{
+	background-color: white;
+	display: inline-block;
+	padding: 0px 10px;
+	width: 100%;
+}
+
+.min-stng .p-stng{
+  display: inline-block;
+  float: left;
+}
+
+.button.sting {
+  background: #009acb;
+  border-color: 009acb;
+  border-radius: 5px;
+  box-shadow: none;
+  color: #fff;
+  display: block;
+  font-weight: bold;
+  height: 30px;
+  margin: 10px 0 0;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.pky label {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 auto;
+  max-width: 160px;
+  width: 100%;
+  font-family: "Arial Bold","Arial";
+}
+
+.pky input {
+  border: 1px solid;
+  color: #000000;
+  display: inline-block;
+  font-family: "Arial";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  height: 25px;
+  text-align: left;
+  text-decoration: none;
+  top: 0;
+  width: 260px;
+}
+
+.pky {
+  margin: 15px 0;
+}
+.pec-btn{
+  display: table;
+}
+
+.pec-btn h3 {
+  font-family: "Arial";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  display: inline-block;
+  float: left;
+}
+
+.pec-btn button{
+  background-color: #e0e0e0;
+/*border: 1px solid;*/
+border-radius: 8px;
+/*box-shadow: none;*/
+border:none !important;
+color: #0073af;
+display: inline-block;
+font-family: "Arial Bold","Arial";
+font-style: normal;
+font-weight: 700;
+height: 32px;
+margin-left: 22px;
+margin-top: 18px;
+width: 100px;
+}
+.pec-btn button:hover{
+	background-color:#09C;
+	color:white;
+}
+
+.pcdc{
+  margin-right: 50px; margin-top:22px; 
+  float: right;
+  font-family: "Arial Regular","Arial";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: left;
+}
+
+.pc-why{
+  background-color: rgb(115, 164, 119);
+  padding:10px;
+  color: #fff;
+}
+
+.pc-why .ax_paragraph p{
+  display: table;
+}
+
+.pc-why .ax_paragraph p img{
+  display: inline-block;
+  float: left;
+}
+
+.pc-why .ax_paragraph p span{
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px 10px 0;
+}
+
+.pc-why .ax_paragraph .pc-ax p span{
+  margin: 0 auto;
+  padding: 0;
+  font-family: "Arial Regular","Arial";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: left;
+}
+
+.pc-hlp {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.pc-hlp span{
+  color: #000000;
+  font-family: "Arial Bold","Arial";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.pc-hlp p{
+  border-top: 1px solid #cccccc;
+  font-family: "Arial Regular","Arial";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-top: 10px;
+  text-align: left;
+}
+
+.pc-btn .submit {
+  display: inline-block;
+  float: left;
+  margin-right: 10px;
+}
+
+.pc-btn {
+  display: table;
+  float: left;
+  
+}
+.header-div{
+	display: table;
+	
+     
+}
+.header-div .header-h{
+	display: inline-block;
+  float: left;
+  font-size: 30px;
+  margin: 4px 0 0;
+}
+.header-div .header-a{
+	display: inline-block;
+    float: left;
+	
+	
+}
+.header-div  button{
+	background-color: #e0e0e0;
+	/*border: 1px solid;*/
+	border-radius: 8px;
+	/*box-shadow: none;*/
+	border:none !important;
+	color: #0073af;
+	display: inline-block;
+	font-family: "Arial Bold","Arial";
+	font-style: normal;
+	font-weight: 700;
+	height: 32px;
+	margin-left: 22px;
+	margin-top: 7px;
+	width: 100px;
+	
+}
+.count{
+	float:right;
+}
+.header-div  button:hover{
+	background-color:#09C;
+	color:white;
+}
+.cust-anchor{
+	color:blue;
+	text-decoration:underline;
+}
+.data-text{
+	color:#91f098;
+}
+.button-add{
+	background-color:#009ACB !important;
+	border:none !important;
+	color:white !important;
+	font-family: "Arial Bold","Arial";
+	font-style: normal;
+	font-weight: 700;
+	height: 32px;
+	margin-left: 22px;
+	margin-top: 7px;
+	width: 100px;
+}
+.button-cancel{
+	font-family: "Arial Bold","Arial";
+	font-style: normal;
+	font-weight: 700;
+	height: 32px;
+	margin-left: 22px;
+	margin-top: 7px;
+	width: 100px;
+}
+
+#ancher-show{
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+}
+.subsubsub li {
+  white-space: normal !important;
 }

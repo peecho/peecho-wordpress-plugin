@@ -87,15 +87,20 @@
   display: none !important; }
 
 .mfp-preloader {
-  color: #CCC;
+  /*background: rgba(0, 0, 0, 0) url("../ajax-loader.gif") no-repeat scroll center center;*/
+  color: #ccc;
+  height: 403px;
+  left: 8px;
+  margin-top: -0.8em;
+  overflow: hidden;
   position: absolute;
+  right: 8px;
+  text-align: center;
   top: 50%;
   width: auto;
-  text-align: center;
-  margin-top: -0.8em;
-  left: 8px;
-  right: 8px;
-  z-index: 1044; }
+  z-index: 1044; 
+  padding: 40px 0px;
+}
   .mfp-preloader a {
     color: #CCC; }
     .mfp-preloader a:hover {

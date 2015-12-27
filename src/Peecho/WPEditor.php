@@ -114,10 +114,7 @@ class Peecho_WPEditor
             }
         }
         ?>
-
             var tabs = $('#peecho-tabs').tabs();
-
-            
             $(function() {
                 $( "#peecho-dialog" ).dialog({
                     autoOpen: false,
@@ -171,7 +168,7 @@ class Peecho_WPEditor
         <?php
 
         }
-        ?>
+        ?>                        
                             if (peecho_caller == 'html') {
                                 // HTML editor in WordPress 3.3 and greater
                                 QTags.insertContent(insert_snippet);

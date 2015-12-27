@@ -1,4 +1,8 @@
 <?php
+@ini_set( 'upload_max_size' , '1264M' );
+@ini_set( 'post_max_size', '1264M');
+@ini_set( 'max_execution_time', '300000' );
+
 /*
 	Plugin Name: Peecho
 	Plugin URI: https://wordpress.org/plugins/
@@ -22,6 +26,8 @@
 
 /** Load all of the necessary class files for the plugin */
 spl_autoload_register('Peecho::autoload');
+
+
 
 /**
  * Init Singleton Class.
@@ -62,6 +68,8 @@ class Peecho{
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
+        add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
+		
         new Peecho_Admin;
         new Peecho_WPEditor;
         new Peecho_Shortcode;
@@ -102,6 +110,8 @@ class Peecho{
     public function uninstall()
     {
         delete_option('peecho_options');
+        delete_option('user_script_id');
+        delete_option('peecho_button_id');
         global $wpdb;
         $wpdb->query(
             "
@@ -188,56 +198,57 @@ class Peecho{
             define('PEECHO_DISABLE_PHP', true);
         }
     }
+
+    public function peecho_plugin_notices()
+    {
+        ob_start();
+        $plugin = plugin_basename(__FILE__);
+        global $pagenow;       
+        $userId = get_option('user_script_id');
+        $buttonId = get_option('peecho_button_id');
+        if($pagenow == 'plugins.php') {
+            if (is_plugin_active($plugin)){
+                if($userId == '' && $buttonId == ''){            
+                    echo '<div class="updated" style="background-color:#73A477;">
+                        <div><img src="../wp-includes/images/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="'.home_url().'/wp-admin/admin.php?page=peecho%2Fpeecho.php&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
+                     </div>';
+                }
+            	
+			}
+			
+        }
+		
+		
+    }
+	
+	
 }
-
-
-
-
-
-/*add_action('admin_menu', 'sep_menuexample_create_menu' );
-function sep_menuexample_create_menu() {
-
-add_menu_page( 'My Plugin Settings Page', 'Menu Example Settings','manage_options', __FILE__, 'sep_menuexample_settings_page',screen_icon('edit'))
-;
-}
-function sep_menuexample_settings_page(){
-    echo "<br>";
-    echo "THIS IS SETTINGS PAGE";
-}*/
-
-
-/*add_action('admin_menu', 'my_menu_pages');
-function my_menu_pages(){
-    add_menu_page('My Page Title', 'Peecho', 'manage_options', 'my-menu', 'my_menu_output' );
-    add_submenu_page('my-menu', 'Submenu Page Title', 'Setting', 'manage_options', 'my-menu' );
-    add_submenu_page('my-menu', 'Submenu Page Title2', 'Peecho Button', 'manage_options', 'my-menu2' );
-} 
-
-function my_menu_output(){
-	 global $wpdb;
-	 echo "sdgvsd";
-	}*/
 
 
 add_action( 'admin_menu', 'register_my_custom_menu_page' );
-add_action( 'admin_menu', 'register_my_custom_submenu_page' );
 function register_my_custom_menu_page(){
-    add_menu_page( 'Settings', 'Peecho', 'manage_options', 'customteam', 'my_custom_menu_page'); 
-}
-function register_my_custom_submenu_page() {
-    add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'buttons', 'my_custom_submenu_page' ); 
-    add_submenu_page( 'customteam', 'Setting', 'Setting', 'manage_options', 'settings', 'my_custom_submenu_page_2' );
-    
+     $capability = 'manage_options';
+    if (defined('PEECHO_ALLOW_EDIT_POSTS')
+        and current_user_can('edit_posts')
+    ) {
+        $allowed = true;
+        $capability = 'edit_posts';
+    }
+    add_menu_page( 'Settings', 'Peecho', 'manage_options', 'customteam', 'my_custom_menu_page',plugins_url( 'assets/peecho.png', __FILE__ ));
+    add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'customteam', 'my_custom_submenu_page'); 
+    add_submenu_page( 'customteam', 'Settings', 'Settings', 'manage_options', 'settings', 'my_custom_submenu_page_2');
 }
 function my_custom_menu_page() {
-   global $wpdb;
-   echo '<p><h1>Peecho: Buttons</h1></p>';
-			require_once('views/button.php');
+    global $wpdb;
+    echo '<div class="wrap">';
+	require_once('views/button.php');
+    echo '</div>';
 }
 function my_custom_submenu_page(){
 	global $wpdb;
-	echo '<p><h1>Peecho: Buttons</h1></p>';
-	require_once('views/button.php');
+    echo '<div class="wrap">';
+    require_once('views/button.php');
+    echo '</div>';
 }
 function my_custom_submenu_page_2(){
 	global $wpdb;
@@ -246,22 +257,16 @@ function my_custom_submenu_page_2(){
 	</script>';
 }
 
-
-
-
- function my_admin_notice(){
-    global $pagenow;
-				if ( $pagenow == 'plugins.php' ) {
-				$userId = get_option('user_script_id');
-				$buttonId = get_option('peecho_button_id');
-				if($userId == '' && $buttonId == ''){
-					
-					 echo '<div class="updated" style="background-color:#73A477;">
-						<div><img src="../wp-includes/images/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="../wp-admin/options-general.php?page=peecho%2Fpeecho.php&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
-					 </div>';
-				}
-			}
+/*=======custom css for the icon ============*/
+add_action('admin_head', 'my_custom_css');
+function my_custom_css() {
+  echo '<style>
+    #adminmenu #toplevel_page_customteam .wp-menu-image img {
+        height: 30px;
+        opacity: 1;
+        padding: 2px 0 0;
+    }
+  </style>';
 }
-add_action('admin_notices', 'my_admin_notice');
 
 add_action('plugins_loaded', array('Peecho', 'getInstance'));  
