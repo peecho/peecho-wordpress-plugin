@@ -236,7 +236,7 @@ function register_my_custom_menu_page(){
     }
     add_menu_page( 'Settings', 'Peecho', 'manage_options', 'customteam', 'my_custom_menu_page',plugins_url( 'assets/peecho.png', __FILE__ ));
     add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'customteam', 'my_custom_submenu_page'); 
-    add_submenu_page( 'customteam', 'Settings', 'Settings', 'manage_options', 'settings', 'my_custom_submenu_page_2');
+    add_submenu_page( 'customteam', 'Settings', 'Settings', 'manage_options', 'peecho-settings', 'my_custom_submenu_page_2');
 }
 function my_custom_menu_page() {
     global $wpdb;
