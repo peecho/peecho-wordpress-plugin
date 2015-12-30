@@ -5,11 +5,11 @@
 
 /*
 	Plugin Name: Peecho
-	Plugin URI: https://wordpress.org/plugins/
+	Plugin URI: https://wordpress.org/plugins/peecho/
 	Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
 	Author: Peecho
 	Author URI: http://www.peecho.com/
-	Version: 1.0
+	Version: 2.0
 	License: GPLv2 or later 
 	Text Domain: peecho
 	
