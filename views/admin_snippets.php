@@ -1,9 +1,10 @@
 <?php
 $dir = plugin_dir_url( __FILE__ );
+$x = dirname(dirname(__FILE__));
+
 $snippets = get_option(Peecho::OPTION_KEY);
 ?>
 <link rel="stylesheet" href="<?php echo $dir; ?>popup/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo $dir; ?>popup/dist/magnific-popup.css">
 <script src="<?php echo $dir; ?>popup/dist/jquery.magnific-popup.min.js"></script>
@@ -93,7 +94,7 @@ if (!empty($snippets)) {
 } else{
         $userId = get_option('user_script_id');
 		if(empty($userId)){
-			echo '<tr><td colspan="3"><div style="color:red"> You haven\'t created any print buttons yet. To create a button, please first specify your Peecho Button Key under <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings.</a> 
+			echo '<tr><td colspan="3"><div style="color:red"> You haven\'t created any print buttons yet. To create a button, please first specify your Peecho Button Key under <a href="options-general.php?page='.$x.'/peecho.php&tab=tools">Settings.</a> 
 			</div></td></tr>';                    
 		}else{
 			echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button" to create your first print button.</div> </td></tr>';
@@ -112,11 +113,14 @@ if (!empty($snippets)) {
     </div>
 </div>
 <?php
+	$dir = plugin_dir_path( __FILE__ ); 
+	$x1   = plugin_basename( __FILE__ );
+          
     echo'<div style="float: left; height: auto; width: 38%;padding:18px;">';
         echo '<div class="pc-why">
             <div class="ax_paragraph" id="u70">
-        		<p>
-                    <img src="../wp-content/plugins/peecho/image/peecho.png" class="img " id="u70_img">
+        		<p> 
+                    <img src="'. plugins_url( 'image/peecho.png', $x1 ).'" class="img " id="u70_img">
                    <span style="font: bold; font-size: 21px">Customize your button</span>
                 </p>
                 <div class="pc-ax">
@@ -151,6 +155,26 @@ if (!empty($snippets)) {
     <input type="hidden" name="action" value="" id="prm_action">
 </form>
 
+<div class="modal fade" id="confirmDelete11" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Delete Parmanently</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure about this ?</p>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-primary" id="confirmnew">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <style>
     .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
         display: none !important;
@@ -158,13 +182,26 @@ if (!empty($snippets)) {
     img.mfp-img {
         padding: 0px !important;
     }    
- </style>  
+ </style> 
+ 
+  
 <script type="text/javascript">
-function confirmComplete() {
+function confirmComplete(){
+	jQuery('#confirmDelete11').modal();
+	return false;
+}
+jQuery(document).ready(function(){
+	jQuery('#confirmnew').click(function(){
+        jQuery('#prm_action').val('delete');
+		jQuery('#peecho-form').submit();
+		return true;
+	})
+
+})
+function confirmComplete1() {
     var answer=confirm("Are you sure you want to delete this button ?");
     if (answer==true)
     {
-        $('#prm_action').val('delete');
         return true;
     }
     else
@@ -174,7 +211,7 @@ function confirmComplete() {
 }
 function confirmUpdate()
 {
-    $('#prm_action').val('update');
+    jQuery('#prm_action').val('update');
         return true;
 }
 </script>

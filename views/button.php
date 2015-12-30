@@ -3,7 +3,6 @@
 	$dir = plugin_dir_url( __FILE__ );   
 ?>
 <link rel="stylesheet" href="<?php echo $dir; ?>popup/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo $dir; ?>popup/dist/magnific-popup.css">
 <script src="<?php echo $dir; ?>popup/dist/jquery.magnific-popup.min.js"></script>
@@ -162,13 +161,17 @@ if(isset($_POST['checked'][0])){
 	  	<button class="button-secondary deletedisable" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Button" data-message="Are you sure you want to delete this button ?" name="delete-snippets">Delete Selected</button>
 		<?php 
 			//echo Peecho_Admin::submit('delete-snippets', __('Delete Selected', Peecho::TEXT_DOMAIN), 'button-secondary deletedisable', false);
+			$dir = plugin_dir_url(__FILE__); 
+			$x   = plugin_basename( __FILE__ );
+			$plugin_dir_path = ABSPATH . 'wp-content/plugins/'.$x
+			
 		?>
 	</div>
 	<div style="height: auto; width: 30%; padding:3px;margin-top:50px;">
         <div class="pc-why">
             <div class="ax_paragraph" id="u70">
-        		<p>
-                    <img src="../wp-content/plugins/peecho/image/peecho.png" class="img " id="u70_img">
+        		<p> 
+                    <img src="<?php echo plugins_url( 'image/peecho.png', $x ) ?>" class="img " id="u70_img">
                    <span style="font-weight:bold; font-size: 21px">Quick Tip</span>
                 </p>
                 <div class="pc-ax">
@@ -198,42 +201,49 @@ if(isset($_POST['checked'][0])){
   </div>
 </div>
 
-<?php $apiid = get_option('peecho_button_id'); ?>
+<?php 
+
+   $apiid = get_option('peecho_button_id'); 
+	$dir = plugin_dir_url( __FILE__ ); 
+	$x = dirname(dirname(__FILE__));
+	
+  
+ ?>
 <!-- Dialog show event handler -->
 <script type="text/javascript">
-  $('#confirmDelete').on('show.bs.modal', function (e) {
-      $message = $(e.relatedTarget).attr('data-message');
-      $(this).find('.modal-body p').text($message);
-      $title = $(e.relatedTarget).attr('data-title');
-      $(this).find('.modal-title').text($title);
+  jQuery('#confirmDelete').on('show.bs.modal', function (e) {
+      $message = jQuery(e.relatedTarget).attr('data-message');
+      jQuery(this).find('.modal-body p').text($message);
+      $title = jQuery(e.relatedTarget).attr('data-title');
+      jQuery(this).find('.modal-title').text($title);
       // Pass form reference to modal for submission on yes/ok
-      var form = $(e.relatedTarget).closest('form');
-      $(this).find('.modal-footer #confirm').data('form', form);
+      var form = jQuery(e.relatedTarget).closest('form');
+      jQuery(this).find('.modal-footer #confirm').data('form', form);
   });
 
   <!-- Form confirm (yes/ok) handler, submits form -->
-  $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
-      $(this).data('form').submit();
+  jQuery('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
+      jQuery(this).data('form').submit();
   });
 </script>
 
 <script language="javascript" type="text/javascript">
-	$(document).ready(function(){
-		setTimeout(function(){$('.deletedisable').attr('disabled','disabled');},500)
-		$('.messageCheckbox').click(function(){
+	jQuery(document).ready(function(){
+		setTimeout(function(){jQuery('.deletedisable').attr('disabled','disabled');},500)
+		jQuery('.messageCheckbox').click(function(){
 			checkcheckbox();
 		})
-		$('.checkhead').click(function(){
+		jQuery('.checkhead').click(function(){
 			checkcheckbox();	
 		})
-		$('#checkall').click(function(event) {  //on click
+		jQuery('#checkall').click(function(event) {  //on click
 			if(this.checked) { // check select status
-				$('.messageCheckbox').each(function() { //loop through each checkbox
+				jQuery('.messageCheckbox').each(function() { //loop through each checkbox
 					this.checked = true;  //select all checkboxes with class "checkbox1"
 					checkcheckbox();              
 				});
 			}else{
-				$('.messageCheckbox').each(function() { //loop through each checkbox
+				jQuery('.messageCheckbox').each(function() { //loop through each checkbox
 					this.checked = false; //deselect all checkboxes with class "checkbox1"  
 					checkcheckbox();                    
 				});        
@@ -243,23 +253,27 @@ if(isset($_POST['checked'][0])){
 
 
 	function checkcheckbox(){
-		var checkedNum = $('input[name="checked[]"]:checked').length;
+		var checkedNum = jQuery('input[name="checked[]"]:checked').length;
 		if (checkedNum > 0){
-			$('.deletedisable').prop('disabled',false);
-			$('#editselect').prop('disabled',false);
+			jQuery('.deletedisable').prop('disabled',false);
+			jQuery('#editselect').prop('disabled',false);
 		}else{
-			$('.deletedisable').prop('disabled',true);
-			$('#editselect').prop('disabled',true);
+			jQuery('.deletedisable').prop('disabled',true);
+			jQuery('#editselect').prop('disabled',true);
 		}
 	}
 	
 </script>
+
+
 <script type="text/javascript">
 	var p=document.createElement("script");p.type="text/javascript";p.async=true;
 	var h=("https:"==document.location.protocol?"https://":"http://");
 	p.src=h+"d3aln0nj58oevo.cloudfront.net/button/script/<?php echo $apiid; ?>.js";
 	var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(p,s);
 </script>
+
+
 
 <script type="text/javascript">
 	function checkedurl(){
@@ -273,7 +287,7 @@ if(isset($_POST['checked'][0])){
 		}	
 		//console.log(checkedValue); 
 		var checkval = checkedValue.join();
-		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=peecho%2Fpeecho.php&tab=snippets&snippet="+checkval;
+		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=<?php echo $x; ?>/peecho.php&tab=snippets&snippet="+checkval;
 	}   
 	function fileupload(id){
 		var fileName, fileExtension;
@@ -287,17 +301,17 @@ if(isset($_POST['checked'][0])){
 			fileExtension = image_url.replace(/^.*\./, '');			
 			switch (fileExtension) {
 	            case 'png': case 'jpeg': case 'jpg':
-	            	$('#divFiles').text('');
+	            	jQuery('#divFiles').text('');
 	                jQuery('#image_url_'+id).val(image_url);
 					setTimeout(function(){jQuery('#uploadfilename').html(uploaded_image.toJSON().filename);},500);
 	                break;
 	            case 'pdf':
-	            	$('#divFiles').text('');
+	            	jQuery('#divFiles').text('');
 	                jQuery('#image_url_'+id).val(image_url);
 					setTimeout(function(){jQuery('#uploadfilename').html(uploaded_image.toJSON().filename);},500);
 	                break;
 	            default:
-	                $('#divFiles').text('Please Upload Image or Pdf File.');
+	                jQuery('#divFiles').text('Please Upload Image or Pdf File.');
 	                jQuery('#image_url_'+id).val('');
 					setTimeout(function(){jQuery('#uploadfilename').html(uploaded_image.toJSON().filename);},500);
         	}			
@@ -307,10 +321,10 @@ if(isset($_POST['checked'][0])){
 	jQuery(document).ready(function(){
 		jQuery('#peecho-form').submit(function(){
 			// Setup form validation on the #register-form element
-			var title = $("#title").val();
-			var tarea = $("#second-text-area").val();
+			var title = jQuery("#title").val();
+			var tarea = jQuery("#second-text-area").val();
 			var img = new String($(".image-url").attr("id"));
-			var imgurl = $('#'+img).val();
+			var imgurl = jQuery('#'+img).val();
 			if(!title)
 			{
 				alert('Please enter the title...');
@@ -321,7 +335,7 @@ if(isset($_POST['checked'][0])){
 					alert('Please upload a file...');
 					return false;
 				}else{				
-		        	$('#myModal').modal('hide');
+		        	jQuery('#myModal').modal('hide');
 					jQuery.magnificPopup.open({
 						items: {
 							src: '<?php echo $dir; ?>popup/ajax-loader.gif'
@@ -359,7 +373,8 @@ if(isset($_POST['checked'][0])){
 						<div  style="margin:20px; margin-top:10px;">
                                 <input style="width:520px" type='text' name='<?php echo $totalbutton; ?>_title' value='' id="title"/>
                                 <input type="hidden" style="display:none" name="image_url['<?php echo $totalbutton; ?>']" id="image_url_<?php echo $totalbutton; ?>" class="image-url">
-                        </div>                        
+                        </div>
+                                                
                         <div style="display:none;margin-left:20px" id="next-part">
 	                        <h3> Print button code</h3>
 	                        <p>You can find your button code under Publications > Details > Print Button in the Peecho <a href="https://www.peecho.com" target="_blank">dashboard</a></p>
@@ -386,9 +401,9 @@ if(isset($_POST['checked'][0])){
     </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){
-	$('#myModal').on('hidden.bs.modal', function (e) {
-	  	$(this)
+jQuery(document).ready(function(){
+	jQuery('#myModal').on('hidden.bs.modal', function (e) {
+	  	jQuery(this)
 	    .find("#title,textarea")
 	       .val('')
 	       .end()
@@ -397,17 +412,17 @@ $(document).ready(function(){
 	       .end();
 	});
 
-	$('#ancher-show').click(function(){
-			$('#next-part').show();
-			$('#upload-button').hide();
-			$('#uploadfilename').text('');
+	jQuery('#ancher-show').click(function(){
+			jQuery('#next-part').show();
+			jQuery('#upload-button').hide();
+			jQuery('#uploadfilename').text('');
 		})	
 });
-$(document).ready(function(){
-	$('#ancher-show-again').click(function(){
-			$('#next-part').hide();
-			$('#upload-button').show();
-			$('#second-text-area').val('');
+jQuery(document).ready(function(){
+	jQuery('#ancher-show-again').click(function(){
+			jQuery('#next-part').hide();
+			jQuery('#upload-button').show();
+			jQuery('#second-text-area').val('');
 		})	
 });
 </script>

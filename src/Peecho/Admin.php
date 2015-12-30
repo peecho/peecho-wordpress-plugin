@@ -8,7 +8,10 @@ class Peecho_Admin
         add_action('current_screen', array(&$this, 'addHeaderXss'));
         add_action( 'wp_footer', array(&$this ,'scriptFunction') );        
         add_action( 'admin_enqueue_scripts', array(&$this ,'load_wp_media_files'));
-		$this->createphpinifile();  
+		$this->createphpinifile();
+		if(isset($_POST['action']) && ($_POST['action'] == 'delete') ){
+			$this->delete();
+		}  
 		
 	}
 	
@@ -16,33 +19,11 @@ class Peecho_Admin
 	public function createphpinifile(){
 		$wpdir = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 		
-		$filename = $wpdir."/php5.ini";
+		$filename = $wpdir."/php.ini";
+		$filename1 = $wpdir."/php5.ini";
+		$filename2 = $wpdir."/.user.ini";
 
-		if (file_exists($filename)) {
-			$filecontent = file_get_contents($filename, true);
-			
-			if (strpos($filecontent,'upload_max_filesize') == false) {
-				$myfile = fopen($wpdir."/php5.ini", "w") or die("Unable to open file!");
-				$txt = $filecontent."\n memory_limit = 1024M";
-				fwrite($myfile, $txt);
-				fclose($myfile);
-			}else if(strpos($filecontent,'post_max_size') == false){
-				$myfile = fopen($wpdir."/php5.ini", "w") or die("Unable to open file!");
-				$txt = $filecontent."\n upload_max_filesize = 1024M ";
-				fwrite($myfile, $txt);
-				fclose($myfile);
-			}else if(strpos($filecontent,'php_value max_execution_time') == false){
-				$myfile = fopen($wpdir."/php5.ini", "w") or die("Unable to open file!");
-				$txt = $filecontent."\n post_max_size = 1024M";
-				fwrite($myfile, $txt);
-				fclose($myfile);
-			}else if(strpos($filecontent,'php_value max_input_time') == false){
-				$myfile = fopen($wpdir."/php5.ini", "w") or die("Unable to open file!");
-				$txt = $filecontent."\n post_max_size = 1020M";
-				fwrite($myfile, $txt);
-				fclose($myfile);
-			}
-		} else {
+		if (!file_exists($filename)) {
 			$myfile = fopen($wpdir."/php.ini", "w") or die("Unable to open file!");
 			$txt = "upload_max_filesize = 1024M \n
 					post_max_size = 1024M \n
@@ -50,6 +31,17 @@ class Peecho_Admin
 					php_value max_input_time 500";
 			fwrite($myfile, $txt);
 			fclose($myfile);
+		} else if(!file_exists($filename1)){
+			$myfile1 = fopen($wpdir."/php5.ini", "w") or die("Unable to open file!");
+			$txt1 = $filecontent1."\n post_max_size = 1024M";
+			fwrite($myfile1, $txt1);
+			fclose($myfile1);
+		}else if(!file_exists($filename2)){
+			$myfile2 = fopen($wpdir."/.user.ini", "w") or die("Unable to open file!");
+			$txt2 = $filecontent2."\n file_uploads = On \n post_max_size = 1024M \n upload_max_filesize = 1024M";
+			fwrite($myfile2, $txt2);
+			fclose($myfile2);
+			
 		}
 	}
 	
@@ -57,9 +49,10 @@ class Peecho_Admin
     {
         $pluginFile = plugin_basename(dirname(Peecho::FILE));
         $pluginFile .= '/peecho.php';
+        $x = dirname(dirname(dirname(__FILE__)));
 
         if ($file == $pluginFile) {
-            $url = 'admin.php?page=peecho%2Fpeecho.php&tab=tools';
+            $url = 'admin.php?page='.$x.'/peecho.php&tab=tools';
             $link = "<a href='{$url}'>";
             $link .= __('Settings', Peecho::TEXT_DOMAIN).'</a>';
             $links[] = $link;
@@ -142,11 +135,8 @@ class Peecho_Admin
      */
     private function delete()
     {
-        if (isset($_POST['delete-snippets'])
-            && isset($_POST['update_snippets_nonce'])
-            && wp_verify_nonce($_POST['update_snippets_nonce'], 'update_snippets')
-            && $_POST['action'] == 'delete'
-        ){            
+        if ($_POST['action'] == 'delete'){  
+		             
             $snippets = get_option(Peecho::OPTION_KEY);
 
             if (empty($snippets) || !isset($_POST['checked'])) {
@@ -165,13 +155,18 @@ class Peecho_Admin
                 }
             }            
             update_option(Peecho::OPTION_KEY, $newsnippets);
-            $this->message(
+/*            $this->message(
                 __(
                     'Selected snippets have been deleted.',
                     Peecho::TEXT_DOMAIN
                 )
             );
-            header("location:admin.php?page=customteam");
+*/			?>
+              <script>
+			  		window.location = 'admin.php?page=customteam';
+			  </script>
+
+            <?php
         }
     }
 
@@ -272,7 +267,11 @@ class Peecho_Admin
 				
                 update_option(Peecho::OPTION_KEY, $new_snippets);
                 //$this->message(__('Snippets have been updated.', Peecho::TEXT_DOMAIN));
-				header("location:admin.php?page=customteam");
+				?>
+                <script>
+					window.location = 'admin.php?page=customteam';
+				</script>
+                <?php
             }
         }
     }
@@ -330,8 +329,10 @@ class Peecho_Admin
 			<div class="header-div">
             <h1 class="header-h">Peecho : Edit Button</h1> <a class="header-a" href="admin.php?page=customteam"><button class="" style="" type="button">Add New</button></a></div>';
 		}
+		$x = dirname(dirname(dirname(__FILE__)));
+
         $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'snippets';
-        $base_url = '?page=peecho/peecho.php&amp;tab=';
+        $base_url = '?page='.$x.'/peecho.php&amp;tab=';
         $tabs = array('snippets' => __('Peecho Buttons', Peecho::TEXT_DOMAIN), 'tools' => __('Settings', Peecho::TEXT_DOMAIN));
         echo '<h2 class="nav-tab-wrapper" style="display:none;">';
         foreach ($tabs as $tab => $title) {
@@ -383,13 +384,14 @@ class Peecho_Admin
 		      echo '<div id="u84" class="nt-cnt">&nbspNot Connected</div>';    
         }
 		echo '</div>';
+        $x1   = plugin_basename( __FILE__ );
 
         echo '<form method="post" action="">';
             echo'<div style="float: right; height: auto; width: 30%; padding:3px;">';
             echo '<div class="pc-why">
                     <div class="ax_paragraph" id="u70">
                 		<p>
-                            <img src="../wp-content/plugins/peecho/image/peecho.png" class="img " id="u70_img">
+                            <img src="'.plugins_url( 'image/peecho.png', $x1 ).'" class="img " id="u70_img">
                            <span style="font: bold; font-size: 21px">Why Peecho</span>
                         </p>
                         <div class="pc-ax">

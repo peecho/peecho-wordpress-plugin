@@ -145,8 +145,7 @@ class Peecho{
         }
         return do_shortcode($snippet);
     }
-    private function testHost()
-    {
+    private function testHost(){
         if (version_compare(PHP_VERSION, self::MIN_PHP_VERSION, '<')) {
             add_action('admin_notices', array(&$this, 'phpVersionError'));
             return false;
@@ -209,9 +208,11 @@ class Peecho{
         if($pagenow == 'plugins.php') {
             if (is_plugin_active($plugin)){
                 if($userId == '' && $buttonId == ''){ 
-				    $dir = plugin_dir_path( __FILE__ );           
+				    $dir = plugin_dir_url( __FILE__ ); 
+						$x = plugin_basename( __FILE__ );
+          
                     echo '<div class="updated" style="background-color:#73A477;">
-                        <div><img src="'.$dir.'/image/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="'.home_url().'/wp-admin/admin.php?page=peecho%2Fpeecho.php&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
+                        <div><img src="'.$dir.'/image/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="'.home_url().'/wp-admin/admin.php?page='.$x.'&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
                      </div>';
                 }
             	
