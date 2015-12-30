@@ -1,28 +1,33 @@
 <?php
+@ini_set( 'upload_max_size' , '1264M' );
+@ini_set( 'post_max_size', '1264M');
+@ini_set( 'max_execution_time', '300000' );
+
 /*
-Plugin Name: Peecho
-Plugin URI: https://wordpress.org/plugins/
-Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
-Author: Peecho
-Author URI: http://www.peecho.com/
-Version: 1.0
-License: GPLv2 or later 
-Text Domain: peecho
-
-Copyright 2009-2015 Peecho  (email : artstorm [at] gmail [dot] com)
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
+	Plugin Name: Peecho
+	Plugin URI: https://wordpress.org/plugins/peecho/
+	Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
+	Author: Peecho
+	Author URI: http://www.peecho.com/
+	Version: 2.0
+	License: GPLv2 or later 
+	Text Domain: peecho
+	
+	Copyright 2009-2015 Peecho  (email : artstorm [at] gmail [dot] com)
+	
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 */
 
 /** Load all of the necessary class files for the plugin */
 spl_autoload_register('Peecho::autoload');
+
+
 
 /**
  * Init Singleton Class.
@@ -63,6 +68,8 @@ class Peecho{
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
+        add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
+		
         new Peecho_Admin;
         new Peecho_WPEditor;
         new Peecho_Shortcode;
@@ -103,6 +110,8 @@ class Peecho{
     public function uninstall()
     {
         delete_option('peecho_options');
+        delete_option('user_script_id');
+        delete_option('peecho_button_id');
         global $wpdb;
         $wpdb->query(
             "
@@ -136,8 +145,7 @@ class Peecho{
         }
         return do_shortcode($snippet);
     }
-    private function testHost()
-    {
+    private function testHost(){
         if (version_compare(PHP_VERSION, self::MIN_PHP_VERSION, '<')) {
             add_action('admin_notices', array(&$this, 'phpVersionError'));
             return false;
@@ -189,6 +197,79 @@ class Peecho{
             define('PEECHO_DISABLE_PHP', true);
         }
     }
+
+    public function peecho_plugin_notices()
+    {
+        ob_start();
+        $plugin = plugin_basename(__FILE__);
+        global $pagenow;       
+        $userId = get_option('user_script_id');
+        $buttonId = get_option('peecho_button_id');
+        if($pagenow == 'plugins.php') {
+            if (is_plugin_active($plugin)){
+                if($userId == '' && $buttonId == ''){ 
+				    $dir = plugin_dir_url( __FILE__ ); 
+						$x = plugin_basename( __FILE__ );
+          
+                    echo '<div class="updated" style="background-color:#73A477;">
+                        <div><img src="'.$dir.'/image/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="'.home_url().'/wp-admin/admin.php?page='.$x.'&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
+                     </div>';
+                }
+            	
+			}
+			
+        }
+		
+		
+    }
+	
+	
 }
 
-add_action('plugins_loaded', array('Peecho', 'getInstance'));
+
+add_action( 'admin_menu', 'register_my_custom_menu_page' );
+function register_my_custom_menu_page(){
+     $capability = 'manage_options';
+    if (defined('PEECHO_ALLOW_EDIT_POSTS')
+        and current_user_can('edit_posts')
+    ) {
+        $allowed = true;
+        $capability = 'edit_posts';
+    }
+    add_menu_page( 'Settings', 'Peecho', 'manage_options', 'customteam', 'my_custom_menu_page',plugins_url( 'assets/peecho.png', __FILE__ ));
+    add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'customteam', 'my_custom_submenu_page'); 
+    add_submenu_page( 'customteam', 'Settings', 'Settings', 'manage_options', 'peecho-settings', 'my_custom_submenu_page_2');
+}
+function my_custom_menu_page() {
+    global $wpdb;
+    echo '<div class="wrap">';
+	require_once('views/button.php');
+    echo '</div>';
+}
+function my_custom_submenu_page(){
+	global $wpdb;
+    echo '<div class="wrap">';
+    require_once('views/button.php');
+    echo '</div>';
+}
+function my_custom_submenu_page_2(){
+	global $wpdb;
+	$x = plugin_basename( __FILE__ );
+	echo '<script>
+	  window.location = "?page='.$x.'&tab=tools";
+	</script>';
+}
+
+/*=======custom css for the icon ============*/
+add_action('admin_head', 'my_custom_css');
+function my_custom_css() {
+  echo '<style>
+    #adminmenu #toplevel_page_customteam .wp-menu-image img {
+        height: 30px;
+        opacity: 1;
+        padding: 2px 0 0;
+    }
+  </style>';
+}
+
+add_action('plugins_loaded', array('Peecho', 'getInstance'));  

@@ -907,7 +907,7 @@ $.magnificPopup = {
 
 		tClose: 'Close (Esc)',
 
-		tLoading: 'Loading...'
+		tLoading: '&nbsp;'
 
 	}
 };

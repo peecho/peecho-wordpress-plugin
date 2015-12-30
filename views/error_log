@@ -1,0 +1,2 @@
+[30-Dec-2015 03:55:38 America/Chicago] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home3/gopro28/public_html/thefootballcouch.com/wp-content/plugins/peecho-wordpress-plugin-2/views/button.php on line 3
+[30-Dec-2015 03:55:41 America/Chicago] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home3/gopro28/public_html/thefootballcouch.com/wp-content/plugins/peecho-wordpress-plugin-2/views/button.php on line 3
