@@ -303,3 +303,36 @@ width: 100px;
 .subsubsub li {
   white-space: normal !important;
 }
+
+#peechonav {
+	width: 200px;
+	background: #fff;
+	color:  #222;
+	line-height: 25px;
+	font-size: 14px;
+	padding: 0 10px;
+	cursor: pointer;
+}	
+.peechoselect li a{
+	text-decoration:none !important;
+	outline:none !important;
+}
+.peechoselect li{
+	border:none !important;s
+	outline:none !important;
+}
+.peechoselect li:focus{outline: 0 !important;}
+.peechoselect li a:focus{outline: 0 !important;}
+.peechoselect li{
+	border:none !important;
+	outline:none !important;
+}
+#peechonav ol li{outline:0 !important;}
+#peechonav ol:hover{outline:0 !important;}
+
+.mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
+	display: none !important;
+}
+img.mfp-img {
+	padding: 0px !important;
+}

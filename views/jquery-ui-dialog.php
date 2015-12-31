@@ -1,5 +1,3 @@
-<?php // Setup the dialog divs ?>
-       
 <div class="hidden">
     <div id="peecho-dialog" title="Insert Peecho Print Button">
 
@@ -17,12 +15,14 @@
                     ?>"  id="peecho-shortcode-<?php echo $key;
                     ?>" onclick="jQuery('#peecho-shortcode-<?php echo $key;
                     ?>-radio').attr('checked','checked')">
-					<?php echo ucwords($snippet['title']); ?></a></li>
+					<?php echo ucwords($snippet['title']); ?></a>
+                    </li>
                 <?php 
-                } ?>
+                }
+				?>
 
                  <?php
-                 $userId = get_option('user_script_id');
+                $userId = get_option('user_script_id');
                 if(empty($userId)){
                    echo '<div style="color:red"> You haven\'t created any print buttons yet. To create a button, go to the plugin  <a href="options-general.php?page=peecho/peecho.php&&tab=tools">Settings</a>.
                     </div>';
@@ -83,60 +83,30 @@
             } ?>
     
 
-                </div>
+      </div>
 </div>
-<style>
-#peechonav {
-    width: 200px;
-    background: #fff;
-    color:  #222;
-    line-height: 25px;
-    font-size: 14px;
-    padding: 0 10px;
-    cursor: pointer;
-}
-
-.peechoselect li a{
-	text-decoration:none !important;
-	outline:none !important;
-}
-.peechoselect li{
-	border:none !important;
-	outline:none !important;
-}
-.peechoselect li:focus{outline: 0 !important;}
-.peechoselect li a:focus{outline: 0 !important;}
-.peechoselect li{
-	border:none !important;
-	outline:none !important;
-}
-#peechonav ol li{outline:0 !important;}
-#peechonav ol:hover{outline:0 !important;}
-
-</style>
 <script>
-var nav = jQuery('#peechonav');
-var selection = jQuery('.peechoselect');
-var select = selection.find('li');
-nav.click(function(event) {
-    if (nav.hasClass('active')) {
-        nav.removeClass('active');
-        selection.stop().slideUp(200);
-    } else {
-        nav.addClass('active');
-        selection.stop().slideDown(200);
-    }
-    event.preventDefault();
-});
-select.click(function(event) {
-    // updated code to select the current language
-    select.removeClass('active');
-    jQuery(this).addClass('active');
-});
-function getpeechoshortcut(ID){
-   //jQuery('#'+ID).trigger('click');
-   //jQuery('#'+ID+'-radio').attr('checked','checked');
-   //alert('here');
-}
-
+	var nav = jQuery('#peechonav');
+	var selection = jQuery('.peechoselect');
+	var select = selection.find('li');
+	nav.click(function(event) {
+		if (nav.hasClass('active')) {
+			nav.removeClass('active');
+			selection.stop().slideUp(200);
+		} else {
+			nav.addClass('active');
+			selection.stop().slideDown(200);
+		}
+		event.preventDefault();
+	});
+	select.click(function(event) {
+		// updated code to select the current language
+		select.removeClass('active');
+		jQuery(this).addClass('active');
+	});
+	function getpeechoshortcut(ID){
+	   //jQuery('#'+ID).trigger('click');
+	   //jQuery('#'+ID+'-radio').attr('checked','checked');
+	   //alert('here');
+	}	
 </script>
