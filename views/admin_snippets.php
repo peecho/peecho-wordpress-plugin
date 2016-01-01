@@ -1,13 +1,6 @@
 <?php
-$dir = plugin_dir_url( __FILE__ );
-$x = dirname(dirname(__FILE__));
-
-$snippets = get_option(Peecho::OPTION_KEY);
+	$snippets = get_option(Peecho::OPTION_KEY);		
 ?>
-<link rel="stylesheet" href="<?php echo $dir; ?>popup/bootstrap.min.css">
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="<?php echo $dir; ?>popup/dist/magnific-popup.css">
-<script src="<?php echo $dir; ?>popup/dist/jquery.magnific-popup.min.js"></script>
 
 <form method="post" action="" id="peecho-form">
     <?php wp_nonce_field('update_snippets', 'update_snippets_nonce'); ?>
@@ -23,7 +16,7 @@ $snippets = get_option(Peecho::OPTION_KEY);
     <table class="widefat " id="peecho-plugin-upload" cellspacing="0"  style=" height: auto;padding:10px;">
         <thead>
             <tr>
-                <th scope="col" class="check-column"><input type="checkbox" /></th>
+                <th scope="col" class="check-column"><input type="checkbox" id="checkall" /></th>
                 <th scope="col" style="width: 180px;"><?php _e('Title', Peecho::TEXT_DOMAIN); ?></th>
                 <th></th>
                 <th scope="col"><?php _e('Print Button Code', Peecho::TEXT_DOMAIN); ?> <a style="float:right; text-decoration:underline;" target="_blank" href="https://www.peecho.com">Peecho dashboard</a></th> 
@@ -41,7 +34,7 @@ if (!empty($snippets)) {
 		if (in_array($key,$getedit)) {
 ?>
         <tr class='recent'>
-            <th scope='row' class='check-column'><input type='checkbox'  name='checked[]' value='<?php echo $key; ?>' /></th>
+            <th scope='row' class='check-column'><input type='checkbox'  name='checked[]' value='<?php echo $key; ?>' onclick="checkcheckbox()" /></th>
             <td class='row-title'>
                 <input type='text' name='<?php echo $key; ?>_title' value='<?php echo $snippet['title']; ?>' /> 
             </td>
@@ -94,7 +87,7 @@ if (!empty($snippets)) {
 } else{
         $userId = get_option('user_script_id');
 		if(empty($userId)){
-			echo '<tr><td colspan="3"><div style="color:red"> You haven\'t created any print buttons yet. To create a button, please first specify your Peecho Button Key under <a href="options-general.php?page='.$x.'/peecho.php&tab=tools">Settings.</a> 
+			echo '<tr><td colspan="3"><div style="color:red"> You haven\'t created any print buttons yet. To create a button, please first specify your Peecho Button Key under <a href="options-general.php?page='.BASENAME.'&tab=tools">Settings.</a> 
 			</div></td></tr>';                    
 		}else{
 			echo '<tr><td colspan="3"><div style="color:red">No Peecho print buttons added yet. Click "Add Button" to create your first print button.</div> </td></tr>';
@@ -104,23 +97,16 @@ if (!empty($snippets)) {
         </tbody>
     </table>
     <div class="pc-btn">
-        <?php
-        	//Peecho_Admin::submit('update-snippets', __('Update Selected', Peecho::TEXT_DOMAIN));
-        	//Peecho_Admin::submit('delete-snippets', __('Delete Selected', Peecho::TEXT_DOMAIN), 'button-secondary', true);
-    	?>
-        <div class="submit"><input type="submit" class="button-secondary" value="Update Selected" name="update-snippets" onclick="return confirmUpdate();"></div>
-        <div class="submit"><input type="submit" class="button-secondary" value="Delete Selected" name="delete-snippets" onclick="return confirmComplete();"></div>
+        <div class="submit"><input type="submit" class="button-secondary" value="Update Selected" name="update-snippets" onclick="return confirmUpdate();" disabled="disabled" id="editselect"></div>
+        <div class="submit"><input type="submit" class="button-secondary" value="Delete Selected" name="delete-snippets" onclick="return confirmComplete();" disabled="disabled" id="deletedisable"></div>
     </div>
 </div>
 <?php
-	$dir = plugin_dir_path( __FILE__ ); 
-	$x1   = plugin_basename( __FILE__ );
-          
     echo'<div style="float: left; height: auto; width: 38%;padding:18px;">';
         echo '<div class="pc-why">
             <div class="ax_paragraph" id="u70">
         		<p> 
-                    <img src="'. plugins_url( 'image/peecho.png', $x1 ).'" class="img " id="u70_img">
+                    <img src="'. plugins_url( 'image/peecho.png', Peecho::FILE ).'" class="img " id="u70_img">
                    <span style="font: bold; font-size: 21px">Customize your button</span>
                 </p>
                 <div class="pc-ax">
@@ -145,8 +131,8 @@ if (!empty($snippets)) {
         echo '<div class="pc-hlp">
                 <span>Looking for help?</span>
                 <p>
-                  Маке sure to look at the <a href="http://www.peecho.com/en/documentation/print-button"> Peecho Documentation,</br> 
-                  FAQ </a> and contact<a href="http://www.peecho.com/en/documentation/print-button"> support@peecho.com </a>if you have any questions.
+                  Маке sure to look at the <a href="https://www.peecho.com/en/publishers/publishers-print-button "> Peecho Documentation,</br> 
+                  FAQ </a> and contact<a href="https://www.peecho.com/en/publishers/publishers-print-button"> support@peecho.com </a>if you have any questions.
                 </p>';
         echo '</div>';
 	echo '</div>';	
@@ -175,68 +161,73 @@ if (!empty($snippets)) {
 
 
 
-<style>
-    .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
-        display: none !important;
-    }
-    img.mfp-img {
-        padding: 0px !important;
-    }    
- </style> 
- 
-  
 <script type="text/javascript">
-function confirmComplete(){
-	jQuery('#confirmDelete11').modal();
-	return false;
-}
-jQuery(document).ready(function(){
-	jQuery('#confirmnew').click(function(){
-        jQuery('#prm_action').val('delete');
-		jQuery('#peecho-form').submit();
-		return true;
+	function confirmComplete(){
+		jQuery('#confirmDelete11').modal();
+		return false;
+	}
+	jQuery(document).ready(function(){
+		jQuery('#confirmnew').click(function(){
+			jQuery('#prm_action').val('delete');
+			jQuery('#peecho-form').submit();
+			return true;
+		})
+		
+		jQuery('#checkall').click(function(event) {  //on click
+			if(this.checked) { // check select status
+				jQuery('.messageCheckbox').each(function() { //loop through each checkbox
+					this.checked = true;  //select all checkboxes with class "checkbox1"
+					checkcheckbox();              
+				});
+			}else{
+				jQuery('.messageCheckbox').each(function() { //loop through each checkbox
+					this.checked = false; //deselect all checkboxes with class "checkbox1"  
+					checkcheckbox();                    
+				});        
+			}
+		 });
+		
+	
 	})
-
-})
-function confirmComplete1() {
-    var answer=confirm("Are you sure you want to delete this button ?");
-    if (answer==true)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-function confirmUpdate()
-{
-    jQuery('#prm_action').val('update');
-        return true;
-}
+	function confirmUpdate(){
+		jQuery('#prm_action').val('update');
+		return true;
+	}
+	
+	function checkcheckbox(){
+		var checkedNum = jQuery('input[name="checked[]"]:checked').length;
+		if (checkedNum > 0){
+			jQuery('#deletedisable').prop('disabled',false);
+			jQuery('#editselect').prop('disabled',false);
+		}else{
+			jQuery('#deletedisable').prop('disabled',true);
+			jQuery('#editselect').prop('disabled',true);
+		}
+	}
+	
 </script>
 <script type="text/javascript">
     function fileupload(id){
-        var image = wp.media({ 
-            title: 'Upload Image',
-            //mutiple: true if you want to upload multiple files at once
-            multiple: false
-        }).open().on('select', function(e){
-            var uploaded_image = image.state().get('selection').first();
-            var image_url = uploaded_image.toJSON().url;
-            jQuery('#image_url_'+id).val(image_url);
-            jQuery.magnificPopup.open({
-                items: {
-                    src: '<?php echo $dir; ?>popup/ajax-loader.gif'
-                },
-                closeOnBgClick : false,
-                type: 'image'
-    
-              // You may add options here, they're exactly the same as for $.fn.magnificPopup call
-              // Note that some settings that rely on click event (like disableOn or midClick) will not work here
-            }, 0);
-                
-            setTimeout(function(){jQuery('#peecho-form').submit();},1000);
-        });
+		var image = wp.media({ 
+			title: 'Upload Image',
+			//mutiple: true if you want to upload multiple files at once
+			multiple: false
+		}).open().on('select', function(e){
+			var uploaded_image = image.state().get('selection').first();
+			var image_url = uploaded_image.toJSON().url;
+			jQuery('#image_url_'+id).val(image_url);
+			jQuery.magnificPopup.open({
+				items: {
+					src: '<?php echo PLUGINURL; ?>popup/ajax-loader.gif'
+				},
+				closeOnBgClick : false,
+				type: 'image'
+	
+			  // You may add options here, they're exactly the same as for $.fn.magnificPopup call
+			  // Note that some settings that rely on click event (like disableOn or midClick) will not work here
+			}, 0);
+				
+			setTimeout(function(){jQuery('#peecho-form').submit();},1000);
+		});
     }
 </script>  
