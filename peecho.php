@@ -1,8 +1,4 @@
 <?php
-@ini_set( 'upload_max_size' , '1264M' );
-@ini_set( 'post_max_size', '1264M');
-@ini_set( 'max_execution_time', '300000' );
-
 /*
 	Plugin Name: Peecho
 	Plugin URI: https://wordpress.org/plugins/peecho/
@@ -25,9 +21,12 @@
 */
 
 /** Load all of the necessary class files for the plugin */
+@ini_set( 'upload_max_size' , '1264M' );
+@ini_set( 'post_max_size', '1264M');
+@ini_set( 'max_execution_time', '300000' );
 spl_autoload_register('Peecho::autoload');
-
-
+define('PLUGINURL',plugin_dir_url( __FILE__ ));
+define('BASENAME',plugin_basename( __FILE__ )); 
 
 /**
  * Init Singleton Class.
@@ -36,43 +35,60 @@ spl_autoload_register('Peecho::autoload');
  * @link    http://www.peecho.com/
  */
 class Peecho{
-	
     /** Holds the plugin instance */
     private static $instance = false;
-
     /** Define plugin constants */
-    const MIN_PHP_VERSION     = '5.3.0';
-    const MIN_WP_VERSION      = '3.3';
-    const OPTION_KEY          = 'peecho_options';
-    const USER_META_KEY       = 'peecho';
-    const TEXT_DOMAIN         = 'peecho';
-    const FILE                = __FILE__;
+	
+	const MIN_PHP_VERSION     = '5.3.0';
+	const MIN_WP_VERSION      = '3.3';
+	const OPTION_KEY          = 'peecho_options';
+	const USER_META_KEY       = 'peecho';
+	const TEXT_DOMAIN         = 'peecho';
+	const FILE                = __FILE__;
 
-    /**
-     * Singleton class
-     */
-    public static function getInstance()
-    {
+
+    public static function getInstance(){
         if (!self::$instance) {
             self::$instance = new self();
         }
         return self::$instance;
     }
 
-    private function __construct()
-    {
+    private function __construct(){
         if (!$this->testHost()) {
-            return;
+        	return;
         }
         add_action('init', array($this, 'textDomain'));
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
         add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
+        
+		$style_url = plugins_url('/assets/peecho.css', Peecho::FILE);
+        wp_register_style('peecho', $style_url, false, '2.0');
+        wp_enqueue_style('peecho');
 		
-        new Peecho_Admin;
+		$script_url1 = plugins_url('/assets/bootstrap.min.js', Peecho::FILE);
+        wp_register_script('bootstrap.min.js', $script_url1, false, '2.0');
+        wp_enqueue_script('bootstrap.min.js');
+		
+		$script_url2 = plugins_url('/assets/bootstrap.min.css', Peecho::FILE);
+        wp_register_style('bootstrap.min.css', $script_url2, false, '2.0');
+        wp_enqueue_style('bootstrap.min.css');
+        
+		$style_url3 = plugins_url('/assets/magnific-popup.css', Peecho::FILE);
+        wp_register_style('popup.css', $style_url3, false, '2.0');
+        wp_enqueue_style('popup.css');
+		
+		$script_url4 = plugins_url('/assets/jquery.magnific-popup.min.js', Peecho::FILE);
+        wp_register_script('popup.min.js', $script_url4, false, '2.0');
+        wp_enqueue_script('popup.min.js');
+		
+		new Peecho_Admin;
         new Peecho_WPEditor;
         new Peecho_Shortcode;
+
+		
     }
     public static function autoload($className)
     {
@@ -240,18 +256,21 @@ function register_my_custom_menu_page(){
     add_submenu_page( 'customteam', 'Button', 'Buttons', 'manage_options', 'customteam', 'my_custom_submenu_page'); 
     add_submenu_page( 'customteam', 'Settings', 'Settings', 'manage_options', 'peecho-settings', 'my_custom_submenu_page_2');
 }
+
 function my_custom_menu_page() {
     global $wpdb;
     echo '<div class="wrap">';
 	require_once('views/button.php');
     echo '</div>';
 }
+
 function my_custom_submenu_page(){
 	global $wpdb;
     echo '<div class="wrap">';
     require_once('views/button.php');
     echo '</div>';
 }
+
 function my_custom_submenu_page_2(){
 	global $wpdb;
 	$x = plugin_basename( __FILE__ );

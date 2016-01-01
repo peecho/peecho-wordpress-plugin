@@ -1,12 +1,3 @@
-<?php
-	//ini_set('memory_limit', '-1');
-	$dir = plugin_dir_url( __FILE__ );   
-?>
-<link rel="stylesheet" href="<?php echo $dir; ?>popup/bootstrap.min.css">
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="<?php echo $dir; ?>popup/dist/magnific-popup.css">
-<script src="<?php echo $dir; ?>popup/dist/jquery.magnific-popup.min.js"></script>
-
 <div class="pec-btn">
 	<h3>Peecho: Buttons</h3>
 	<?php
@@ -17,49 +8,68 @@
 		<button type="button"style="" class="" data-toggle="modal" data-target="#myModal">Add New</button>
 	<?php } ?>
 </div>
+
 <?php
-if(isset($_POST['add-snippets'])){  
-    $snippets = get_option(Peecho::OPTION_KEY);
-    if (empty($snippets)) {
-        $snippets = array();
-    }
-	$key = $_POST['key'];
-			
-	if(!empty($_POST['image_url']["'".$key."'"]))
-	{
-		$imgurl =  $_POST['image_url']["'".$key."'"];
-		$apikey =  get_option('user_script_id');
-		$url = "http://www.peecho.com/rest/storage/createPublicationFromUpload";
-		$postvars = "sourceUrl=" . $imgurl . "&applicationApiKey=".$apikey ;
-		$temp = curl_init($url);
-		curl_setopt($temp, CURLOPT_POST, 1);
-		curl_setopt($temp, CURLOPT_POSTFIELDS, $postvars);
-		curl_setopt($temp, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($temp, CURLOPT_HEADER, 0);
-		curl_setopt($temp, CURLOPT_RETURNTRANSFER, 1);						
-		curl_setopt($temp, CURLOPT_URL,$url);
-		$resultnew = curl_exec($temp);						
-		curl_close($temp);
-		$finalresult = json_decode($resultnew);
-		$publicationid = $finalresult->publicationId;
-		
-		$state = 'PROCESSING';
-		do{
-			$ch = curl_init();
-			$url = "http://www.peecho.com/rest/storage/details?publicationId=".$publicationid;
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_URL,$url);
-			$mesagestatus = curl_exec($ch);
-			curl_close($ch);						
-			$message = json_decode($mesagestatus);
-		    $state = $message->state;
-			if($state == 'DONE'){
-				$type = $message->filetype;
-				$width = $message->width;
-			    $height = $message->height;
-				$noofpage = $message->numberofpages;
+	if(isset($_POST['add-snippets'])){  
+		$snippets = get_option(Peecho::OPTION_KEY);
+		if (empty($snippets)) {
+			$snippets = array();
+		}
+		$key = $_POST['key'];
 				
-				$snippetsvalue = '<a title="Peecho" href="http://www.peecho.com/" class="peecho-print-button" data-filetype="'.$type.'" data-width="'.$width.'" data-height="'.$height.'" data-pages="'.$noofpage.'" data-publication="'.$publicationid.'">Print</a>';							
+		if(!empty($_POST['image_url']["'".$key."'"]))
+		{
+			$imgurl =  $_POST['image_url']["'".$key."'"];
+			$apikey =  get_option('user_script_id');
+			$url = "http://www.peecho.com/rest/storage/createPublicationFromUpload";
+			$postvars = "sourceUrl=" . $imgurl . "&applicationApiKey=".$apikey ;
+			$temp = curl_init($url);
+			curl_setopt($temp, CURLOPT_POST, 1);
+			curl_setopt($temp, CURLOPT_POSTFIELDS, $postvars);
+			curl_setopt($temp, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($temp, CURLOPT_HEADER, 0);
+			curl_setopt($temp, CURLOPT_RETURNTRANSFER, 1);						
+			curl_setopt($temp, CURLOPT_URL,$url);
+			$resultnew = curl_exec($temp);						
+			curl_close($temp);
+			$finalresult = json_decode($resultnew);
+			$publicationid = $finalresult->publicationId;
+			
+			$state = 'PROCESSING';
+			do{
+				$ch = curl_init();
+				$url = "http://www.peecho.com/rest/storage/details?publicationId=".$publicationid;
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_URL,$url);
+				$mesagestatus = curl_exec($ch);
+				curl_close($ch);						
+				$message = json_decode($mesagestatus);
+				$state = $message->state;
+				if($state == 'DONE'){
+					$type = $message->filetype;
+					$width = $message->width;
+					$height = $message->height;
+					$noofpage = $message->numberofpages;
+					
+					$snippetsvalue = '<a title="Peecho" href="http://www.peecho.com/" class="peecho-print-button" data-filetype="'.$type.'" data-width="'.$width.'" data-height="'.$height.'" data-pages="'.$noofpage.'" data-publication="'.$publicationid.'">Print</a>';							
+					array_push(
+						$snippets,
+						array(
+							'title' => trim($_POST[$key.'_title']),
+							'vars' => str_replace(' ', '', trim($_POST[$key.'_vars'])),
+							'description' => wp_specialchars_decode(trim(stripslashes($_POST[$key.'_description'])), ENT_NOQUOTES),
+							'shortcode' => true,
+							'php' => false,
+							'wptexturize' => false,
+							'snippet' => wp_specialchars_decode(trim(stripslashes($snippetsvalue)), ENT_NOQUOTES)
+						)
+					);				
+				}
+			}while($state == 'PROCESSING');
+		}
+		else{
+			if(!empty($_POST['text_url']["'".$key."'"])){			
+				$snippetsvalue = $_POST['text_url']["'".$key."'"];
 				array_push(
 					$snippets,
 					array(
@@ -71,46 +81,28 @@ if(isset($_POST['add-snippets'])){
 						'wptexturize' => false,
 						'snippet' => wp_specialchars_decode(trim(stripslashes($snippetsvalue)), ENT_NOQUOTES)
 					)
-				);				
+				);
 			}
-		}while($state == 'PROCESSING');
-	}
-	else{
-		if(!empty($_POST['text_url']["'".$key."'"])){			
-			$snippetsvalue = $_POST['text_url']["'".$key."'"];
-			array_push(
-				$snippets,
-				array(
-					'title' => trim($_POST[$key.'_title']),
-					'vars' => str_replace(' ', '', trim($_POST[$key.'_vars'])),
-					'description' => wp_specialchars_decode(trim(stripslashes($_POST[$key.'_description'])), ENT_NOQUOTES),
-					'shortcode' => true,
-					'php' => false,
-					'wptexturize' => false,
-					'snippet' => wp_specialchars_decode(trim(stripslashes($snippetsvalue)), ENT_NOQUOTES)
-				)
-			);
 		}
+		update_option(Peecho::OPTION_KEY, $snippets);
+		echo 'Snippets have been updated.';
 	}
-    update_option(Peecho::OPTION_KEY, $snippets);
-    echo 'Snippets have been updated.';
-}
-			
-
-if(isset($_POST['checked'][0])){
-    $snippets = get_option(Peecho::OPTION_KEY);
-    if (empty($snippets) || !isset($_POST['checked'])) {
-        return;
-    }
-    $delete = $_POST['checked'];
-    $newsnippets = array();
-    foreach ($snippets as $key => $snippet) {
-        if (in_array($key, $delete) == false) {
-        	array_push($newsnippets, $snippet);
-        }
-    }
-    update_option(Peecho::OPTION_KEY, $newsnippets);
-}
+				
+	
+	if(isset($_POST['checked'][0])){
+		$snippets = get_option(Peecho::OPTION_KEY);
+		if (empty($snippets) || !isset($_POST['checked'])) {
+			return;
+		}
+		$delete = $_POST['checked'];
+		$newsnippets = array();
+		foreach ($snippets as $key => $snippet) {
+			if (in_array($key, $delete) == false) {
+				array_push($newsnippets, $snippet);
+			}
+		}
+		update_option(Peecho::OPTION_KEY, $newsnippets);
+	}
 			
 ?>
 
@@ -159,19 +151,12 @@ if(isset($_POST['checked'][0])){
 		</table>
 	  	<button type="button" onclick="checkedurl()" style="text-decoration:none;" disabled="disabled" class="button-secondary" id="editselect"><span> Edit Selected </span></button>
 	  	<button class="button-secondary deletedisable" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Button" data-message="Are you sure you want to delete this button ?" name="delete-snippets">Delete Selected</button>
-		<?php 
-			//echo Peecho_Admin::submit('delete-snippets', __('Delete Selected', Peecho::TEXT_DOMAIN), 'button-secondary deletedisable', false);
-			$dir = plugin_dir_url(__FILE__); 
-			$x   = plugin_basename( __FILE__ );
-			$plugin_dir_path = ABSPATH . 'wp-content/plugins/'.$x
-			
-		?>
 	</div>
 	<div style="height: auto; width: 30%; padding:3px;margin-top:50px;">
         <div class="pc-why">
             <div class="ax_paragraph" id="u70">
         		<p> 
-                    <img src="<?php echo plugins_url( 'image/peecho.png', $x ) ?>" class="img " id="u70_img">
+                    <img src="<?php echo plugins_url( 'image/peecho.png',Peecho::FILE) ?>" class="img " id="u70_img">
                    <span style="font-weight:bold; font-size: 21px">Quick Tip</span>
                 </p>
                 <div class="pc-ax">
@@ -202,12 +187,7 @@ if(isset($_POST['checked'][0])){
 </div>
 
 <?php 
-
    $apiid = get_option('peecho_button_id'); 
-	$dir = plugin_dir_url( __FILE__ ); 
-	$x = dirname(dirname(__FILE__));
-	
-  
  ?>
 <!-- Dialog show event handler -->
 <script type="text/javascript">
@@ -287,7 +267,7 @@ if(isset($_POST['checked'][0])){
 		}	
 		//console.log(checkedValue); 
 		var checkval = checkedValue.join();
-		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=<?php echo $x; ?>/peecho.php&tab=snippets&snippet="+checkval;
+		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=<?php echo BASENAME; ?>&tab=snippets&snippet="+checkval;
 	}   
 	function fileupload(id){
 		var fileName, fileExtension;
@@ -379,13 +359,13 @@ if(isset($_POST['checked'][0])){
 	                        <h3> Print button code</h3>
 	                        <p>You can find your button code under Publications > Details > Print Button in the Peecho <a href="https://www.peecho.com" target="_blank">dashboard</a></p>
 	                        <textarea style="width:530px" id="second-text-area" name="text_url['<?php echo $totalbutton; ?>']"></textarea><br>
-	                        <a id="ancher-show-again" style="text-decoration:none"><span style="color:black">or skip and</span> <u>upload publication</u></a>
-                        </div>                        
+	                        <a id="ancher-show-again" href="#" style="text-decoration:none"><span style="color:black">or skip and</span> <u>upload publication</u></a>
+                        </div>                         
                         <div style="margin:20px" id="upload-button">
                         		<?php _e('<b>Publication</b>', Peecho::TEXT_DOMAIN) ?><br/>
                                 <input type="button" name="upload-btn" id="upload-btn-<?php echo $totalbutton; ?>" onclick="fileupload('<?php echo $totalbutton; ?>')" class="button-secondary" value="Upload publication">
                                 <span id="uploadfilename" style="color:#600;margin-left:10px;"></span> 
-                                <a id="ancher-show"><span style="color:black">or skip and</span> <u>paste button code directly</u></a>                                
+                                <a id="ancher-show" href="#"><span style="color:black">or skip and</span> <u>paste button code directly</u></a>                                
                                 <input class="" type="hidden" value="Add Button" name="add-snippets">
                                 <input class="" type="hidden" value="<?php echo $totalbutton; ?>" name="key">
                          </div>
