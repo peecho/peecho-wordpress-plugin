@@ -69,9 +69,6 @@ class Peecho{
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
         add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
-        /* Using registered $page handle to hook stylesheet loading */              
-        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_styles' ) );
-        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_scripts' ) );
 		
         new Peecho_Admin;
         new Peecho_WPEditor;
