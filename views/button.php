@@ -84,12 +84,13 @@
 				);
 			}
 		}
+
 		update_option(Peecho::OPTION_KEY, $snippets);
-		echo 'Snippets have been updated.';
+		echo 'Snippets have been Inserted.';
 	}
 				
 	
-	if(isset($_POST['checked'][0])){
+	if(isset($_POST['checked'][0]) && isset($_POST['formtype'])){
 		$snippets = get_option(Peecho::OPTION_KEY);
 		if (empty($snippets) || !isset($_POST['checked'])) {
 			return;
@@ -151,6 +152,7 @@
 		</table>
 	  	<button type="button" onclick="checkedurl()" style="text-decoration:none;" disabled="disabled" class="button-secondary" id="editselect"><span> Edit Selected </span></button>
 	  	<button class="button-secondary deletedisable" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete Button" data-message="Are you sure you want to delete this button ?" name="delete-snippets">Delete Selected</button>
+        <input type="hidden" name="formtype" value="buttons"  />
 	</div>
 	<div style="height: auto; width: 30%; padding:3px;margin-top:50px;">
         <div class="pc-why">
@@ -267,7 +269,7 @@
 		}	
 		//console.log(checkedValue); 
 		var checkval = checkedValue.join();
-		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=<?php echo BASENAME; ?>&tab=snippets&snippet="+checkval;
+		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=peecho%2Fpeecho.php&tab=snippets&snippet="+checkval;
 	}   
 	function fileupload(id){
 		var fileName, fileExtension;
@@ -303,7 +305,7 @@
 			// Setup form validation on the #register-form element
 			var title = jQuery("#title").val();
 			var tarea = jQuery("#second-text-area").val();
-			var img = new String($(".image-url").attr("id"));
+			var img = new String(jQuery(".image-url").attr("id"));
 			var imgurl = jQuery('#'+img).val();
 			if(!title)
 			{

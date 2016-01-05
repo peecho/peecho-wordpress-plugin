@@ -3,8 +3,8 @@ Contributors: Peecho
 Donate link: http://www.peecho.com/
 Tags: print, publisher, photography, print on demand, print books, print magazines, PDF to print
 Requires at least: 4.1.1
-Tested up to: 4.2.3
-Stable tag: trunk
+Tested up to: 4.4
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,10 +55,11 @@ For more information head over to the [Peecho website](http://www.peecho.com) an
 
 == Changelog ==
 
-= 1.0 =
+= 2.1.0 =
+* Refactoring and bug fixes
+
+= 2.0.0 =
+* Upload directly from WP to your Peecho account.
+
+= 1.0.0 =
 * Initial first version.
-
-== Upgrade Notice ==
-
-= 1.0 =
-* This is the first version.
