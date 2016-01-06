@@ -269,7 +269,7 @@
 		}	
 		//console.log(checkedValue); 
 		var checkval = checkedValue.join();
-		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=peecho%2Fpeecho.php&tab=snippets&snippet="+checkval;
+		window.location = "<?php echo home_url(); ?>/wp-admin/admin.php?page=<?php echo Plugin_Name; ?>%2Fpeecho.php&tab=snippets&snippet="+checkval;
 	}   
 	function fileupload(id){
 		var fileName, fileExtension;

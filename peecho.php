@@ -1,8 +1,4 @@
 <?php
-@ini_set( 'upload_max_size' , '1264M' );
-@ini_set( 'post_max_size', '1264M');
-@ini_set( 'max_execution_time', '300000' );
-
 /*
 	Plugin Name: Peecho
 	Plugin URI: https://wordpress.org/plugins/peecho/
@@ -24,10 +20,14 @@
 	GNU General Public License for more details.
 */
 
+/*=====plugin name======*/
+
+$pluginfoldername = basename(__DIR__);
+define('Plugin_Name', $pluginfoldername);
+define('BASENAME', $pluginfoldername.'/peecho.php');
+
 /** Load all of the necessary class files for the plugin */
 spl_autoload_register('Peecho::autoload');
-
-
 
 /**
  * Init Singleton Class.
@@ -69,6 +69,9 @@ class Peecho{
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
         add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
+        /* Using registered $page handle to hook stylesheet loading */              
+        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_styles' ) );
+        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_scripts' ) );
 		
         new Peecho_Admin;
         new Peecho_WPEditor;
@@ -231,10 +234,8 @@ class Peecho{
      * Register and enqueue style sheet.
     */
     public function register_plugin_styles() {
-        wp_register_style( 'Peecho', plugins_url( 'peecho/assets/bootstrap.min.css' ) );
-        wp_register_style( 'Peecho', plugins_url( 'peecho/assets/magnific-popup.css' ) );
-        wp_register_style( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/bootstrap.min.css' ) );
-        wp_register_style( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/magnific-popup.css' ) );
+        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/bootstrap.min.css' ) );
+        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/magnific-popup.css' ) );
         wp_enqueue_style( 'Peecho' );
     }
 
@@ -244,11 +245,9 @@ class Peecho{
     public function register_plugin_scripts() {
         /*script*/        
         wp_deregister_script( 'Peecho' );
-        wp_register_script( 'Peecho', plugins_url( 'peecho/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
-        wp_register_script( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
+        wp_register_script( 'Peecho', plugins_url( Plugin_Name.'/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
         wp_enqueue_script( 'Peecho' );
-        wp_register_script( 'myscript', plugins_url( 'peecho/assets/bootstrap.min.js'), array(), '1.0.0', false);
-        wp_register_script( 'myscript', plugins_url( 'peecho-wordpress-plugin-2/assets/bootstrap.min.js'), array(), '1.0.0', false);
+        wp_register_script( 'myscript', plugins_url( Plugin_Name.'/assets/bootstrap.min.js'), array(), '1.0.0', false);
         wp_enqueue_script( 'myscript' );
         
     }
