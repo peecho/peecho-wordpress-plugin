@@ -233,6 +233,8 @@ class Peecho{
     public function register_plugin_styles() {
         wp_register_style( 'Peecho', plugins_url( 'peecho/assets/bootstrap.min.css' ) );
         wp_register_style( 'Peecho', plugins_url( 'peecho/assets/magnific-popup.css' ) );
+        wp_register_style( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/bootstrap.min.css' ) );
+        wp_register_style( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/magnific-popup.css' ) );
         wp_enqueue_style( 'Peecho' );
     }
 
@@ -243,8 +245,10 @@ class Peecho{
         /*script*/        
         wp_deregister_script( 'Peecho' );
         wp_register_script( 'Peecho', plugins_url( 'peecho/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
+        wp_register_script( 'Peecho', plugins_url( 'peecho-wordpress-plugin-2/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
         wp_enqueue_script( 'Peecho' );
         wp_register_script( 'myscript', plugins_url( 'peecho/assets/bootstrap.min.js'), array(), '1.0.0', false);
+        wp_register_script( 'myscript', plugins_url( 'peecho-wordpress-plugin-2/assets/bootstrap.min.js'), array(), '1.0.0', false);
         wp_enqueue_script( 'myscript' );
         
     }
