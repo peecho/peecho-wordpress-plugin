@@ -5,7 +5,7 @@
 	Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
 	Author: Peecho
 	Author URI: http://www.peecho.com/
-	Version: 2.1.0
+	Version: 2.1.1
 	License: GPLv2 or later 
 	Text Domain: peecho
 	
