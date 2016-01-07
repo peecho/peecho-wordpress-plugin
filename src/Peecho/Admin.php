@@ -349,7 +349,7 @@ class Peecho_Admin
             echo '<div class="pc-why">
                     <div class="ax_paragraph" id="u70">
                 		<p>
-                            <img src="'.plugins_url( 'peecho/image/peecho.png', BASENAME ).'" class="img " id="u70_img">
+                            <img src="'.plugins_url( 'image/peecho.png', BASENAME ).'" class="img " id="u70_img">
                            <span style="font: bold; font-size: 21px">Why Peecho</span>
                         </p>
                         <div class="pc-ax">
