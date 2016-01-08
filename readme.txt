@@ -55,7 +55,7 @@ For more information head over to the [Peecho website](http://www.peecho.com) an
 
 == Changelog ==
 
-= 2.1.1 =
+= 2.1.2 =
 * Couple of small bug fixes
 
 = 2.1.0 =
