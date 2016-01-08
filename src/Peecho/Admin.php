@@ -8,14 +8,9 @@ class Peecho_Admin
         add_action('current_screen', array(&$this, 'addHeaderXss'));
         add_action( 'wp_footer', array(&$this ,'scriptFunction') );        
         add_action( 'admin_enqueue_scripts', array(&$this ,'load_wp_media_files'));
-		if(isset($_POST['action']) && ($_POST['action'] == 'delete') ){
-			$this->delete();
-		}  
-		
+		 		
 	}
-	
-	
-	
+
 	public function actionLinks($links, $file)
     {
         $pluginFile = plugin_basename(dirname(Peecho::FILE));
@@ -105,40 +100,33 @@ class Peecho_Admin
      */
     private function delete()
     {
-        if ($_POST['action'] == 'delete'){  
-		             
+        if ($_POST['action'] == 'delete'){  		             
             $snippets = get_option(Peecho::OPTION_KEY);
-
             if (empty($snippets) || !isset($_POST['checked'])) {
                 $this->message(
                     __('Nothing selected to delete.', Peecho::TEXT_DOMAIN)
                 );
                 return;
             }
+            update_option(Peecho::OPTION_KEY, '');
 
-            $delete = $_POST['checked'];
-            $newsnippets = array();
-			$totalcount = count($snippets);
-			$test = array();
+            $delete = $_POST['checked'];           
+            $new_snippets = array();
 			
             foreach ($snippets as $key => $snippet) {
                 if (in_array($key, $delete) == false) {
-					array_push($newsnippets, $snippet);
+					array_push($new_snippets, $snippet);
 				}
             }
-            update_option(Peecho::OPTION_KEY, $newsnippets);
-/*            $this->message(
-                __(
-                    'Selected snippets have been deleted.',
-                    Peecho::TEXT_DOMAIN
-                )
-            );
-*/			?>
+
+            update_option(Peecho::OPTION_KEY, $new_snippets);
+			
+		?>
               <script>
-			  	 window.location = 'admin.php?page=customteam';
+			  	window.location = 'admin.php?page=customteam';
 			  </script>
 
-            <?php
+        <?php
         }
     }
 
@@ -146,8 +134,7 @@ class Peecho_Admin
      * Update Snippet/s.
      */
     private function update()
-    {
-		
+    {		
         if (isset($_POST['update-snippets'])
             && isset($_POST['update_snippets_nonce'])
             && wp_verify_nonce($_POST['update_snippets_nonce'], 'update_snippets')

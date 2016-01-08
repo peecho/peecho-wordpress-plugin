@@ -1,15 +1,11 @@
 <?php
-@ini_set( 'upload_max_size' , '1264M' );
-@ini_set( 'post_max_size', '1264M');
-@ini_set( 'max_execution_time', '300000' );
-
 /*
 	Plugin Name: Peecho
 	Plugin URI: https://wordpress.org/plugins/peecho/
 	Description: The Peecho Wordpress plug -in will make it easy for Wordpress users to include Peecho Print button in posts and pages.
 	Author: Peecho
 	Author URI: http://www.peecho.com/
-	Version: 2.1.0
+	Version: 2.1.2
 	License: GPLv2 or later 
 	Text Domain: peecho
 	
@@ -24,10 +20,14 @@
 	GNU General Public License for more details.
 */
 
+/*=====plugin name======*/
+
+$pluginfoldername = basename(__DIR__);
+define('Plugin_Name', $pluginfoldername);
+define('BASENAME', $pluginfoldername.'/peecho.php');
+
 /** Load all of the necessary class files for the plugin */
 spl_autoload_register('Peecho::autoload');
-
-
 
 /**
  * Init Singleton Class.
@@ -69,11 +69,15 @@ class Peecho{
 
         add_action('after_setup_theme', array(&$this, 'phpExecState'));
         add_action( 'admin_notices', array(&$this ,'peecho_plugin_notices') );
+        /* Using registered $page handle to hook stylesheet loading */              
+        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_styles' ) );
+        add_action( 'admin_enqueue_scripts', array(&$this, 'register_plugin_scripts' ) );
 		
         new Peecho_Admin;
         new Peecho_WPEditor;
         new Peecho_Shortcode;
     }
+
     public static function autoload($className)
     {
         if (__CLASS__ !== mb_substr($className, 0, strlen(__CLASS__))) {
@@ -93,6 +97,7 @@ class Peecho{
 
         require $fileName;
     }
+
     public function textDomain()
     {
         $domain = self::TEXT_DOMAIN;
@@ -107,6 +112,7 @@ class Peecho{
             dirname(plugin_basename(__FILE__)).'/lang/'
         );
     }
+
     public function uninstall()
     {
         delete_option('peecho_options');
@@ -120,6 +126,7 @@ class Peecho{
             "
         );
     }
+
     public static function getSnippet($name, $variables = ''){
         $snippets = get_option(self::OPTION_KEY, array());
         for ($i = 0; $i < count($snippets); $i++) {
@@ -145,6 +152,7 @@ class Peecho{
         }
         return do_shortcode($snippet);
     }
+
     private function testHost(){
         if (version_compare(PHP_VERSION, self::MIN_PHP_VERSION, '<')) {
             add_action('admin_notices', array(&$this, 'phpVersionError'));
@@ -157,6 +165,7 @@ class Peecho{
         }
         return true;
     }
+
     public function phpVersionError()
     {
         echo '<div class="error"><p><strong>';
@@ -169,6 +178,7 @@ class Peecho{
         );
         echo '</strong></p></div>';
     }
+
     public function wpVersionError()
     {
         echo '<div class="error"><p><strong>';
@@ -185,6 +195,7 @@ class Peecho{
         $data = get_plugin_data(self::FILE);
         return $data['Name'];
     }
+
     public function phpExecState()
     {
         $filter = apply_filters('peecho_php_execution_enabled', true);
@@ -214,16 +225,32 @@ class Peecho{
                     echo '<div class="updated" style="background-color:#73A477;">
                         <div><img src="'.$dir.'/image/peecho.png"></div><div style="font-size:17px; color: #fff;  margin-top: -35px; margin-left: 60px; width: 30%;">Almost done. Activate your account </div><div><a href="'.home_url().'/wp-admin/admin.php?page='.$x.'&tab=tools"><div style="padding: 10px;background-color: #508B61;border: 1px solid green;border-radius: 7px;color: #fff;font-size: 15px;  width: 20%; margin-left: 372px; margin-top: -29px;margin-bottom: 3px;">Activate your Peecho account</div></a></div>
                      </div>';
-                }
-            	
-			}
-			
-        }
-		
-		
+                }	
+			}	
+        }	
     }
-	
-	
+
+    /**
+     * Register and enqueue style sheet.
+    */
+    public function register_plugin_styles() {
+        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/bootstrap.min.css' ) );
+        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/magnific-popup.css' ) );
+        wp_enqueue_style( 'Peecho' );
+    }
+
+    /**
+     * Register and enqueue style sheet.
+    */
+    public function register_plugin_scripts() {
+        /*script*/        
+        wp_deregister_script( 'Peecho' );
+        wp_register_script( 'Peecho', plugins_url( Plugin_Name.'/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
+        wp_enqueue_script( 'Peecho' );
+        wp_register_script( 'myscript', plugins_url( Plugin_Name.'/assets/bootstrap.min.js'), array(), '1.0.0', false);
+        wp_enqueue_script( 'myscript' );
+        
+    }
 }
 
 
