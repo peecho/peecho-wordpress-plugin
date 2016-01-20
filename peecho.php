@@ -234,21 +234,25 @@ class Peecho{
      * Register and enqueue style sheet.
     */
     public function register_plugin_styles() {
-        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/bootstrap.min.css' ) );
-        wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/magnific-popup.css' ) );
-        wp_enqueue_style( 'Peecho' );
+		if($_GET['page'] == 'customteam' || $_GET['page'] == 'peecho-settings' || $_GET['page'] == 'peecho/peecho.php'){
+			wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/bootstrap.min.css' ) );
+			wp_register_style( 'Peecho', plugins_url( Plugin_Name.'/assets/magnific-popup.css' ) );
+			wp_enqueue_style( 'Peecho' );
+		}
     }
 
     /**
      * Register and enqueue style sheet.
     */
     public function register_plugin_scripts() {
-        /*script*/        
-        wp_deregister_script( 'Peecho' );
-        wp_register_script( 'Peecho', plugins_url( Plugin_Name.'/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
-        wp_enqueue_script( 'Peecho' );
-        wp_register_script( 'myscript', plugins_url( Plugin_Name.'/assets/bootstrap.min.js'), array(), '1.0.0', false);
-        wp_enqueue_script( 'myscript' );
+        if($_GET['page'] == 'customteam' || $_GET['page'] == 'peecho-settings' || $_GET['page'] == 'peecho/peecho.php'){
+			/*script*/        
+			wp_deregister_script( 'Peecho' );
+			wp_register_script( 'Peecho', plugins_url( Plugin_Name.'/assets/jquery.magnific-popup.min.js'), array(), '1.0.0', true);
+			wp_enqueue_script( 'Peecho' );
+			wp_register_script( 'myscript', plugins_url( Plugin_Name.'/assets/bootstrap.min.js'), array(), '1.0.0', false);
+			wp_enqueue_script( 'myscript' );
+		}
         
     }
 }
