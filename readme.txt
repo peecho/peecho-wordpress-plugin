@@ -4,7 +4,7 @@ Donate link: http://www.peecho.com/
 Tags: print, publisher, photography, print on demand, print books, print magazines, PDF to print
 Requires at least: 4.1.1
 Tested up to: 4.4
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ For more information head over to the [Peecho website](http://www.peecho.com) an
 4. The final result.
 
 == Changelog ==
+
+= 2.1.3 =
+* CSS fixes
 
 = 2.1.2 =
 * Couple of small bug fixes
