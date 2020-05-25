@@ -3,7 +3,7 @@ Contributors: Peecho
 Donate link: http://www.peecho.com/
 Tags: print, publisher, photography, print on demand, print books, print magazines, PDF to print
 Requires at least: 4.1.1
-Tested up to: 4.4
+Tested up to: 5.4
 Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
